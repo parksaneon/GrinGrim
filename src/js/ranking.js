@@ -1,13 +1,14 @@
 import axios from 'axios';
 
 const root = document.getElementById('root');
-const mydrawings = document.getElementById('mydrawings');
+const ranking = document.getElementById('ranking');
 
-const USER_ID = 10;
+const CATEGORY = '정신';
 
 const render = async () => {
-  const { data: mydrawings } = await axios.get(`http://localhost:8000/drawings/${USER_ID}`);
-  root.innerHTML = mydrawings
+  const { data: categoryRankingDrawings } = await axios.get(`http://localhost:8000/drawings?category=${CATEGORY}`);
+
+  root.innerHTML = categoryRankingDrawings
     .map(
       ({ id, url, likedUserId, nickname }) => `
       <div data-id="${id}">
@@ -20,7 +21,7 @@ const render = async () => {
     .join('');
 };
 
-mydrawings.onclick = e => {
+ranking.onclick = e => {
   e.preventDefault();
   const path = e.target.getAttribute('href');
   window.history.pushState({ path }, null, path);
