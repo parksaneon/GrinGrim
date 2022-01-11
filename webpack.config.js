@@ -1,10 +1,12 @@
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const path = require("path");
+import HtmlWebpackPlugin from "html-webpack-plugin";
+import { CleanWebpackPlugin } from "clean-webpack-plugin";
+import MiniCssExtractPlugin from "mini-css-extract-plugin";
+import path from "path";
 
-module.exports = {
-  entry: "./src/js/index.js",
+const __dirname = path.resolve();
+
+export default {
+  entry: ["regenerator-runtime", "./src/js/index.js"],
   output: {
     path: path.resolve(__dirname, "./dist"),
     filename: "main.js"
