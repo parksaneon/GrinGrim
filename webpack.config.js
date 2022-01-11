@@ -1,27 +1,29 @@
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const path = require("path");
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import { CleanWebpackPlugin } from 'clean-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import path from 'path';
 
-module.exports = {
-  entry: "./src/js/index.js",
+const __dirname = path.resolve();
+
+export default {
+  entry: ['regenerator-runtime', './src/js/index.js'],
   output: {
-    path: path.resolve(__dirname, "./dist"),
-    filename: "main.js"
+    path: path.resolve(__dirname, './dist'),
+    filename: 'main.js'
   },
   module: {
     rules: [
       {
         test: /\.s?css$/,
-        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"]
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader']
       },
       {
         test: /\.m?js$/,
         exclude: /(node_modules)/,
         use: {
-          loader: "babel-loader",
+          loader: 'babel-loader',
           options: {
-            presets: ["@babel/preset-env"]
+            presets: ['@babel/preset-env']
           }
         }
       }
@@ -33,12 +35,12 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "index.html"
+      template: 'index.html'
     }),
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
-      filename: "index.css"
+      filename: 'index.css'
     })
   ],
-  mode: "development"
+  mode: 'development'
 };
