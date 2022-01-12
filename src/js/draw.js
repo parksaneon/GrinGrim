@@ -2,12 +2,12 @@ import regenerato from 'regenerator-runtime';
 import axios from 'axios';
 
 const $canvas = document.querySelector('.my-canvas');
-const $root = document.querySelector('#root');
+const $drawingContainer = document.querySelector('.drawing-container');
 const $timer = document.querySelector('.timer');
 
 let drawingId = 0;
 let categoryid = 0;
-let timer = 10;
+let timer = 30;
 let isFinished = false;
 let countdown = null;
 
@@ -43,7 +43,7 @@ const run = () => {
   if (isFinished) {
     clearInterval(countdown);
     uploadCanvas();
-    $root.innerHTML = `<div class="layer"></div>
+    $drawingContainer.innerHTML = `<div class="layer"></div>
 		<div class="popup">
 			<p>게임이 종료되었어요! 다른 사람들은 어떻게 그렸는지 확인하러 갈까요?</p>
 			<button class="close-popup">결과 보기</button>
