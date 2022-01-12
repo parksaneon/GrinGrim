@@ -41,17 +41,22 @@ const convertToBlob = base64 => {
   });
 };
 
-const uploadCanvas = async () => {
+const uploadCanvas = () => {
   const image = $canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream');
   const file = convertToBlob(image);
   const fileName = 'canvas' + new Date().getTime() + '.png';
   const formData = new FormData();
   formData.append('file', file, fileName);
-
   axios.post('http://localhost:8000/drawings', formData, {
     processData: false,
     contentType: false
   });
 };
 
-document.querySelector('.save').addEventListener('click', uploadCanvas);
+const getDrawingSubject = async () => {
+  const { data: subject } = await axios.get('http://localhost:8000/categories');
+  const $subject = document.querySelector('.subject');
+  $subject.textContent = `주제는 "${subject.subject}"`;
+};
+
+window.addEventListener('DOMContentLoaded', getDrawingSubject);

@@ -49,6 +49,18 @@ const categories = [
   {
     id: 2,
     name: '퇴근'
+  },
+  {
+    id: 3,
+    name: '고양이'
+  },
+  {
+    id: 4,
+    name: '커피'
+  },
+  {
+    id: 5,
+    name: '마블'
   }
 ];
 
@@ -56,7 +68,6 @@ app.use('/images', express.static('images'));
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(express.json());
-
 
 const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 },
@@ -84,6 +95,7 @@ app.post('/drawings', upload.single('file'), (req, res) => {
       likedUserId: []
     }
   ];
+});
 
 const getNickname = userid => users.find(user => user.id === +userid).nickname;
 
@@ -109,6 +121,11 @@ app.get('/drawings', (req, res) => {
     (drawing1, drawing2) => drawing2.likedUserId.length - drawing1.likedUserId.length
   );
   res.send(sortedDrawings);
+});
+
+app.get('/categories', (req, res) => {
+  const randomIndex = Math.floor(Math.random() * (categories.length - 0) + 0);
+  res.json({ subject: categories[randomIndex].name });
 });
 
 app.listen(port, () => {
