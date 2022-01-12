@@ -85,16 +85,18 @@ const generateId = data => (data[data.length - 1]?.id || 0) + 1;
 
 app.post('/drawings', upload.single('file'), (req, res) => {
   console.log('UPLOAD SUCCESS!', req.file);
+  const id = generateId(drawings);
   drawings = [
     ...drawings,
     {
-      id: generateId(drawings),
+      id,
       userid: 1,
       url: req.file.destination + req.file.originalname,
       categoryid: 1,
       likedUserId: []
     }
   ];
+  res.send(id);
 });
 
 const getNickname = userid => users.find(user => user.id === +userid).nickname;
@@ -125,7 +127,7 @@ app.get('/drawings', (req, res) => {
 
 app.get('/categories', (req, res) => {
   const randomIndex = Math.floor(Math.random() * (categories.length - 0) + 0);
-  res.json({ subject: categories[randomIndex].name });
+  res.send(categories[randomIndex]);
 });
 
 app.listen(port, () => {

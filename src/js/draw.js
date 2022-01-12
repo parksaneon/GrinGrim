@@ -1,14 +1,43 @@
 import regenerato from 'regenerator-runtime';
 import axios from 'axios';
-import uploadCanvas from './uploadCanvas';
 
 const $canvas = document.querySelector('.my-canvas');
 const $root = document.querySelector('#root');
 const $timer = document.querySelector('.timer');
 
-let timer = 30;
+let drawingId = 0;
+let categoryid = 0;
+let timer = 10;
 let isFinished = false;
 let countdown = null;
+
+const convertToBlob = base64 => {
+  const decodImg = atob(base64.split(',')[1]);
+  const array = [];
+  for (let i = 0; i < decodImg.length; i++) {
+    array.push(decodImg.charCodeAt(i));
+  }
+  return new Blob([new Uint8Array(array)], {
+    type: 'image/png'
+  });
+};
+
+const uploadCanvas = async () => {
+  const image = $canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream');
+  const file = convertToBlob(image);
+  const fileName = 'canvas' + new Date().getTime() + '.png';
+  const formData = new FormData();
+  formData.append('file', file, fileName);
+  try {
+    const { data: postId } = await axios.post('http://localhost:8000/drawings', formData, {
+      processData: false,
+      contentType: false
+    });
+    drawingId = postId.id;
+  } catch (error) {
+    console.error();
+  }
+};
 
 const run = () => {
   if (isFinished) {
@@ -27,9 +56,10 @@ const run = () => {
 };
 
 const getDrawingSubject = async () => {
-  const { data: subject } = await axios.get('http://localhost:8000/categories');
+  const { data: category } = await axios.get('http://localhost:8000/categories');
+  categoryid = category.id;
   const $subject = document.querySelector('.subject');
-  $subject.textContent = `주제는 "${subject.subject}"`;
+  $subject.textContent = `주제는 "${category.name}"`;
   countdown = setInterval(run, 1000);
 };
 
