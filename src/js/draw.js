@@ -59,29 +59,32 @@ const uploadCanvas = () => {
 
 const $root = document.querySelector('#root');
 const $timer = document.querySelector('.timer');
+
 let timer = 30;
 let isFinished = false;
+let countdown = null;
 
-const run = setInterval(() => {
+const run = () => {
   if (isFinished) {
+    clearInterval(countdown);
     uploadCanvas();
     $root.innerHTML = `<div class="layer"></div>
 		<div class="popup">
 			<p>게임이 종료되었어요! 다른 사람들은 어떻게 그렸는지 확인하러 갈까요?</p>
 			<button class="close-popup">결과 보기</button>
 		</div>`;
-    clearInterval(run);
   } else {
     $timer.textContent = `00:00:${timer < 10 ? '0' + timer : timer}`;
     timer--;
     if (timer < 0) isFinished = true;
   }
-}, 1000);
+};
 
-const getDrawingSubject = (async () => {
+const getDrawingSubject = async () => {
   const { data: subject } = await axios.get('http://localhost:8000/categories');
   const $subject = document.querySelector('.subject');
   $subject.textContent = `주제는 "${subject.subject}"`;
-})().then(run());
+  countdown = setInterval(run, 1000);
+};
 
 window.addEventListener('DOMContentLoaded', getDrawingSubject);
