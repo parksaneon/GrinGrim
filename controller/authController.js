@@ -11,17 +11,19 @@ const setTokenInCookie = (res, accessToken) => {
   });
 };
 
-// const validateId = userId => {
-//   const foundedUser = findUserById(user => userId === user.userId);
-//   if (foundedUser) return res.status(409).json({ message: `${userId}는 이미 존재하는 아이디 입니다.` });
-//   checkValidateId = true;
-// };
+export const checkId = (req, res) => {
+  const { tempId } = req.body;
+  const foundedUser = findUserById(tempId);
+
+  if (foundedUser) res.status(403).json({ message: '이미 존재하는 아이디 입니다.' });
+  else res.status(201).json({ message: '사용 가능한 아이디 입니다.' });
+};
 
 export const signUp = (req, res) => {
-  const { userId, password } = req.body;
+  const { userId, password, nickName } = req.body;
   const hashedPassword = bcrypt.hashSync(password, 10);
 
-  addNewUser({ userId, password: hashedPassword });
+  addNewUser({ userId, password: hashedPassword, nickName });
 
   const accessToken = createToken(userId, process.env.ACCESS_EXPIRE);
   setTokenInCookie(res, accessToken);

@@ -15,9 +15,10 @@ const corsOption = {
 };
 
 app.use(express.static('public'));
-app.use(express.json());
 app.use(cors(corsOption));
 app.use(cookieParser());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 app.use('/auth', authRouter);
 

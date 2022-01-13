@@ -12,7 +12,6 @@
     top: 20%;
     left: 50%;
     transform: translate(-50%);
-    // order: 2;
   }
 
   .main {
@@ -22,7 +21,6 @@
     align-items: center;
 
     div {
-      // width: 30%;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -38,13 +36,75 @@
       }
 
       button {
-        background: $buttonColor;
         width: 500px;
         height: 100px;
         border-radius: 30px;
-        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-        font-weight: 700;
         font-size: 28px;
+      }
+    }
+  }
+
+  .signUser {
+    position: fixed;
+    z-index: 10;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    .close--modal {
+      position: absolute;
+      top: 30px;
+      right: 30px;
+      background-color: transparent;
+      box-shadow: none;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background-color: $boxColor;
+      padding: 80px;
+      border-radius: 15px;
+
+      div {
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        align-items: center;
+        padding-bottom: 35px;
+
+        &:last-of-type {
+          margin-bottom: 40px;
+        }
+
+        label {
+          font-weight: 700;
+          margin-right: 10px;
+        }
+
+        input:not([type='file']) {
+          width: 280px;
+          padding: 15px 10px;
+          border: 0;
+        }
+
+        span {
+          position: absolute;
+          width: 100%;
+          left: 70px;
+          bottom: 8px;
+          font-size: 13px;
+          color: crimson;
+          &.valid {
+            color: #179a31;
+          }
+        }
+      }
+
+      button {
+        height: 50px;
       }
     }
   }

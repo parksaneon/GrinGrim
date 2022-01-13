@@ -6,6 +6,7 @@ const isAuth = (req, res, next) => {
     if (!accessToken) return res.status(401).json('다시 로그인해주세요.');
 
     const decoded = jwt.verify(accessToken, process.env.JWT_SECRET_KEY);
+
     if (decoded) {
       next();
     } else {
