@@ -8,6 +8,7 @@ dotenv.config();
 
 const app = express();
 const port = 8000;
+
 const corsOption = {
   origin: 'http://localhost:9000', // 접근 권한을 부여하는 도메인
   optionsSuccessStatus: 200, // 응답 상태 200으로 설정

@@ -53,8 +53,9 @@ const user = (() => {
           <label for="nickName">닉네임</label>
           <input type="text" id="nickName" name="nickName" placeholder="닉네임" required autocomplete="on"/>
         </div>
-        <div>
-          <input type="file" id="userImage" name="userImage" required />
+        <div class="upload-box">
+        <label for="userImage">이미지를 드래그 하세요</label>
+          <input type="file" id="userImage" name="userImage" required value=""/>
         </div>
         <button type="submit">회원가입</button>
       </form>
@@ -143,6 +144,20 @@ const user = (() => {
     };
   })();
 
+  const showDropImage = input => {
+    if (input.files[0]) {
+      const reader = new FileReader();
+
+      reader.onload = function (e) {
+        const showImage = document.createElement('img');
+        showImage.setAttribute('src', e.target.result);
+        document.querySelector('.upload-box').appendChild(showImage);
+      };
+
+      reader.readAsDataURL(input.files[0]);
+    }
+  };
+
   $body.addEventListener('click', e => {
     if (e.target.matches('.open--modal')) toggleModal();
   });
@@ -175,6 +190,11 @@ const user = (() => {
 
   $sign.addEventListener('click', e => {
     if (e.target.matches('.close--modal')) toggleModal();
+  });
+
+  $sign.addEventListener('change', e => {
+    if (!e.target.matches('#userImage')) return;
+    showDropImage(e.target);
   });
 })();
 
