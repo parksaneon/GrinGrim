@@ -10,7 +10,7 @@ const app = express();
 const port = 8000;
 
 const corsOption = {
-  origin: 'http://localhost:9000', // 접근 권한을 부여하는 도메인
+  origin: '*', // 접근 권한을 부여하는 도메인
   optionsSuccessStatus: 200, // 응답 상태 200으로 설정
   credentials: true // 응답 헤더에 Access-Control-Allow-Credentials 추가
 };

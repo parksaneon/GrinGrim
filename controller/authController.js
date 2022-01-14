@@ -20,7 +20,6 @@ export const checkId = (req, res) => {
 };
 
 export const signUp = (req, res) => {
-  console.log(req.body);
   const { userId, password, nickName } = req.body;
   const hashedPassword = bcrypt.hashSync(password, 10);
 
@@ -32,7 +31,6 @@ export const signUp = (req, res) => {
 };
 
 export const signIn = (req, res) => {
-  console.log(req.body);
   const { userId, password } = req.body;
 
   const findUser = findUserById(userId);

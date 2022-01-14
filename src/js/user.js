@@ -3,7 +3,7 @@ import axios from 'axios';
 const user = (() => {
   const $body = document.querySelector('body');
   const $main = document.querySelector('.main');
-  const $sign = document.querySelector('.signUser');
+  const $formWrap = document.querySelector('.form--wrap');
   let doingNow = null;
 
   const userSignUp = {
@@ -14,11 +14,11 @@ const user = (() => {
   const toggleModal = () => {
     doingNow = null;
     $body.classList.toggle('open--modal');
-    $sign.innerHTML = '';
+    $formWrap.innerHTML = '';
   };
 
   const renderSignIn = () => {
-    $sign.innerHTML = `
+    $formWrap.innerHTML = `
       <button class="close--modal">닫기</button>
       <form method="post" class="signInForm" >
         <div>
@@ -35,7 +35,7 @@ const user = (() => {
   };
 
   const renderSignUp = () => {
-    $sign.innerHTML = `
+    $formWrap.innerHTML = `
       <button class="close--modal">닫기</button>
       <form method="post" class="signUpForm" enctype="multipart/form-data">
         <div>
@@ -53,7 +53,7 @@ const user = (() => {
           <input type="text" id="nickName" name="nickName" placeholder="닉네임" required autocomplete="on"/>
         </div>
         <div class="upload-box">
-        <label for="userImage">이미지를 드래그 하세요</label>
+        <label for="userImage">이곳을 클릭하거나 이미지를 드래그 하세요</label>
           <input type="file" id="userImage" name="userImage" required value=""/>
           <img src="" alt="" class="showImage"/>
         </div>
@@ -62,16 +62,22 @@ const user = (() => {
     `;
   };
 
+  const sendUserReq = async formData => {
+    const res = await axios.post(`http://localhost:8000/auth/${doingNow}`, formData, {
+      withCredentials: true
+    });
+    return res;
+  };
+
   const signIn = async formElement => {
     try {
       const formData = [...new FormData(formElement)].reduce((acc, [key, value]) => {
         acc[key] = value;
         return acc;
       }, {});
-      const res = await axios.post('http://localhost:8000/auth/signIn', formData, {
-        withCredentials: true
-      });
+      const res = await sendUserReq(formData);
       if (res.status === 201) history.pushState({ data: 'some data' }, '로그인 성공', '/');
+      doingNow = null;
     } catch (error) {
       console.error(error);
       alert('아이디 혹은 비밀번호가 일치하지 않습니다!');
@@ -81,10 +87,9 @@ const user = (() => {
   const signUp = async formElement => {
     try {
       const formData = new FormData(formElement);
-      const res = await axios.post('http://localhost:8000/auth/signUp', formData, {
-        withCredentials: true
-      });
+      const res = await sendUserReq(formData);
       if (res.status === 201) history.pushState({ data: 'some data' }, '회원가입 성공', '/');
+      doingNow = null;
     } catch (error) {
       console.error(error);
       alert('회원가입을 실패했습니다.');
@@ -106,7 +111,6 @@ const user = (() => {
     }
 
     let timer = null;
-
     if (timer) clearTimeout(timer);
 
     timer = setTimeout(async () => {
@@ -163,8 +167,7 @@ const user = (() => {
   $main.addEventListener('click', e => {
     e.preventDefault();
     if (!e.target.matches('.open--signForm')) return;
-
-    toggleModal();
+    if (!doingNow) toggleModal();
 
     if (e.target.classList.contains('signIn--open')) {
       doingNow = 'signIn';
@@ -175,22 +178,27 @@ const user = (() => {
     }
   });
 
-  $sign.addEventListener('keyup', ({ target }) => {
+  $formWrap.addEventListener('keyup', ({ target }) => {
     if (doingNow === 'signUp' && target.matches('#userId')) checkValidId(target.value);
     if (doingNow === 'signUp' && target.matches('#password')) checkValidPwd(target.value);
   });
 
-  $sign.addEventListener('submit', e => {
+  $formWrap.addEventListener('submit', e => {
     e.preventDefault();
     if (doingNow === 'signIn') signIn(e.target);
     else if (doingNow === 'signUp') signUp(e.target);
   });
 
-  $sign.addEventListener('click', ({ target }) => {
+  // window.addEventListener('keyup', e => {
+  //   if (e.key !== 'Enter' || !doingNow) return;
+  //   console.log(e.key === 'Enter', !doingNow);
+  // });
+
+  $formWrap.addEventListener('click', ({ target }) => {
     if (target.matches('.close--modal')) toggleModal();
   });
 
-  $sign.addEventListener('change', ({ target }) => {
+  $formWrap.addEventListener('change', ({ target }) => {
     if (target.matches('#userImage')) showDropImage(target);
   });
 })();
