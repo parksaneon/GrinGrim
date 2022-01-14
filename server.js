@@ -21,23 +21,46 @@ let drawings = [
   {
     id: 1,
     userid: 100,
-    url: '/images/drawings/test.jpeg',
-    category: '정신',
+    url: '/images/drawings/canvas1.png',
+    categoryId: 1,
     likedUserId: [1, 2, 3, 4]
   },
+
   {
     id: 2,
     userid: 10,
-    url: '/images/drawings/test.jpeg',
-    category: '정신',
-    likedUserId: [1, 2, 5]
+    url: '/images/drawings/canvas2.png',
+    categoryId: 1,
+    likedUserId: [2, 3]
   },
   {
     id: 3,
+    userid: 100,
+    url: '/images/drawings/canvas3.png',
+    categoryId: 2,
+    likedUserId: []
+  },
+
+  {
+    id: 4,
+    userid: 10,
+    url: '/images/drawings/canvas4.png',
+    categoryId: 2,
+    likedUserId: [1]
+  },
+  {
+    id: 5,
+    userid: 100,
+    url: '/images/drawings/canvas5.png',
+    categories: 2,
+    likedUserId: []
+  },
+  {
+    id: 6,
     userid: 10,
     url: '/images/drawings/test.jpeg',
-    category: '잃음',
-    likedUserId: [1, 2, 3, 4, 5]
+    categoryId: 1,
+    likedUserId: [2, 3]
   }
 ];
 
@@ -49,26 +72,19 @@ const categories = [
   {
     id: 2,
     name: '퇴근'
-  },
-  {
-    id: 3,
-    name: '고양이'
-  },
-  {
-    id: 4,
-    name: '커피'
-  },
-  {
-    id: 5,
-    name: '마블'
   }
 ];
 
 app.use('/images', express.static('images'));
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+const corsOption = {
+  origin: 'http://localhost:9000', // 접근 권한을 부여하는 도메인
+  method: ['GET', 'POST', 'DELETE', 'HEAD', 'PUT', 'PATCH'],
+  optionsSuccessStatus: 200, // 응답 상태 200으로 설정
+  credentials: true // 응답 헤더에 Access-Control-Allow-Credentials 추가
+};
+app.use(cors(corsOption));
 app.use(express.json());
-
 const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 },
   storage: multer.diskStorage({
@@ -82,6 +98,24 @@ const upload = multer({
 });
 
 const generateId = data => (data[data.length - 1]?.id || 0) + 1;
+const getNickname = userid => users.find(user => user.id === +userid).nickname;
+
+app.get('/drawings/:drawingid', (req, res) => {
+  const { drawingid } = req.params;
+  res.send(drawings.filter(({ id }) => id === +drawingid));
+});
+
+app.get('/drawings/category/:categoryid', (req, res) => {
+  const { categoryid } = req.params;
+  const { limit } = req.query;
+  const drawingsFilterCategory = drawings.filter(drawing => drawing.categoryId === +categoryid);
+  const recentDrawings = drawingsFilterCategory.sort((drawing1, drawing2) => drawing2.id - drawing1.id).slice(0, limit);
+  const recentDrawingsWithNickname = recentDrawings.map(drawing => ({
+    ...drawing,
+    nickname: getNickname(drawing.userid)
+  }));
+  res.send(recentDrawingsWithNickname);
+});
 
 app.post('/drawings', upload.single('file'), (req, res) => {
   console.log('UPLOAD SUCCESS!', req.file);
@@ -92,14 +126,13 @@ app.post('/drawings', upload.single('file'), (req, res) => {
       id,
       userid: 1,
       url: req.file.destination + req.file.originalname,
-      categoryid: 1,
+      categoryId: 2,
       likedUserId: []
     }
   ];
-  res.send(id);
+  res.cookie('drawingId', id);
+  res.send();
 });
-
-const getNickname = userid => users.find(user => user.id === +userid).nickname;
 
 app.get('/drawings/:userid', (req, res) => {
   const { userid } = req.params;
@@ -127,7 +160,8 @@ app.get('/drawings', (req, res) => {
 
 app.get('/categories', (req, res) => {
   const randomIndex = Math.floor(Math.random() * (categories.length - 0) + 0);
-  res.send(categories[randomIndex]);
+  res.cookie('categoryId', categories[randomIndex].id);
+  res.send(categories[randomIndex].name);
 });
 
 app.listen(port, () => {
