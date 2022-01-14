@@ -4,7 +4,6 @@ const user = (() => {
   const $body = document.querySelector('body');
   const $main = document.querySelector('.main');
   const $sign = document.querySelector('.signUser');
-  let timer = null;
   let doingNow = null;
 
   const userSignUp = {
@@ -56,27 +55,23 @@ const user = (() => {
         <div class="upload-box">
         <label for="userImage">이미지를 드래그 하세요</label>
           <input type="file" id="userImage" name="userImage" required value=""/>
+          <img src="" alt="" class="showImage"/>
         </div>
         <button type="submit">회원가입</button>
       </form>
     `;
   };
 
-  // const makeFormData = formElement =>
-  //   [...new FormData(formElement)].reduce((acc, cur) => {
-  //     const [key, value] = cur;
-  //     acc[key] = value;
-  //     return acc;
-  //   }, {});
-
   const signIn = async formElement => {
     try {
-      const res = await axios.post('http://localhost:8000/auth/signIn', new FormData(formElement), {
+      const formData = [...new FormData(formElement)].reduce((acc, [key, value]) => {
+        acc[key] = value;
+        return acc;
+      }, {});
+      const res = await axios.post('http://localhost:8000/auth/signIn', formData, {
         withCredentials: true
       });
-      if (res.status === 201) {
-        history.pushState({ data: 'some data' }, '로그인 성공', '/');
-      }
+      if (res.status === 201) history.pushState({ data: 'some data' }, '로그인 성공', '/');
     } catch (error) {
       console.error(error);
       alert('아이디 혹은 비밀번호가 일치하지 않습니다!');
@@ -85,13 +80,14 @@ const user = (() => {
 
   const signUp = async formElement => {
     try {
-      const res = await axios.post('http://localhost:8000/auth/signUp', new FormData(formElement));
-      if (res.status === 201) {
-        history.pushState({ data: 'some data' }, '회원가입 성공', '/');
-      }
-      toggleModal();
+      const formData = new FormData(formElement);
+      const res = await axios.post('http://localhost:8000/auth/signUp', formData, {
+        withCredentials: true
+      });
+      if (res.status === 201) history.pushState({ data: 'some data' }, '회원가입 성공', '/');
     } catch (error) {
       console.error(error);
+      alert('회원가입을 실패했습니다.');
     }
   };
 
@@ -108,7 +104,10 @@ const user = (() => {
       idInformText.innerText = '영문자, 숫자로 6~20자로 조합해주세요';
       return;
     }
-    clearTimeout(timer);
+
+    let timer = null;
+
+    if (timer) clearTimeout(timer);
 
     timer = setTimeout(async () => {
       try {
@@ -145,21 +144,20 @@ const user = (() => {
   })();
 
   const showDropImage = input => {
-    if (input.files[0]) {
-      const reader = new FileReader();
+    if (!input.files[0]) return;
 
-      reader.onload = function (e) {
-        const showImage = document.createElement('img');
-        showImage.setAttribute('src', e.target.result);
-        document.querySelector('.upload-box').appendChild(showImage);
-      };
+    const reader = new FileReader();
 
-      reader.readAsDataURL(input.files[0]);
-    }
+    reader.readAsDataURL(input.files[0]);
+    reader.addEventListener('load', ({ target }) => {
+      const showImage = document.querySelector('.showImage');
+      showImage.setAttribute('src', target.result);
+      showImage.classList.add('show');
+    });
   };
 
-  $body.addEventListener('click', e => {
-    if (e.target.matches('.open--modal')) toggleModal();
+  $body.addEventListener('click', ({ target }) => {
+    if (target.matches('.open--modal')) toggleModal();
   });
 
   $main.addEventListener('click', e => {
@@ -188,13 +186,12 @@ const user = (() => {
     else if (doingNow === 'signUp') signUp(e.target);
   });
 
-  $sign.addEventListener('click', e => {
-    if (e.target.matches('.close--modal')) toggleModal();
+  $sign.addEventListener('click', ({ target }) => {
+    if (target.matches('.close--modal')) toggleModal();
   });
 
-  $sign.addEventListener('change', e => {
-    if (!e.target.matches('#userImage')) return;
-    showDropImage(e.target);
+  $sign.addEventListener('change', ({ target }) => {
+    if (target.matches('#userImage')) showDropImage(target);
   });
 })();
 
