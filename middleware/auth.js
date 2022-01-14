@@ -10,25 +10,25 @@ const isAuth = (req, res, next) => {
     if (decoded) {
       next();
     } else {
-      return res.status(401).json('다시 로그인해주세요.');
+      res.json({ isLogin: false });
     }
-
-    // jwt.verify(accessToken, process.env.JWT_SECRET_KEY, (error, { id }) => {
-    //   if (error) {
-    //     const refreshVerify = jwt.verify(findUserById(id).refreshToken, process.env.JWT_SECRET_KEY);
-
-    //     if (refreshVerify) {
-    //       const accessToken = createToken(id, process.env.ACCESS_EXPIRE);
-    //       setTokenInCookie(res, accessToken);
-    //       next();
-    //     } else {
-    //       return res.status(401).json('다시 로그인해주세요.');
-    //     }
-    //   }
-    // });
   } catch (error) {
-    console.error(error);
+    res.json({ isLogin: false });
   }
 };
 
 export default isAuth;
+
+// jwt.verify(accessToken, process.env.JWT_SECRET_KEY, (error, { id }) => {
+//   if (error) {
+//     const refreshVerify = jwt.verify(findUserById(id).refreshToken, process.env.JWT_SECRET_KEY);
+
+//     if (refreshVerify) {
+//       const accessToken = createToken(id, process.env.ACCESS_EXPIRE);
+//       setTokenInCookie(res, accessToken);
+//       next();
+//     } else {
+//       return res.status(401).json('다시 로그인해주세요.');
+//     }
+//   }
+// });

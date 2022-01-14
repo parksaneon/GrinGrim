@@ -115,7 +115,13 @@ const user = (() => {
 
     timer = setTimeout(async () => {
       try {
-        const res = await axios.post(`http://localhost:8000/auth/checkId`, { tempId });
+        const res = await axios.post(
+          `http://localhost:8000/auth/checkId`,
+          { tempId },
+          {
+            withCredentials: true
+          }
+        );
         if (res.status === 201) {
           idInformText.innerText = '사용 가능한 아이디 입니다.';
           userSignUp.isValidId = true;
@@ -189,17 +195,21 @@ const user = (() => {
     else if (doingNow === 'signUp') signUp(e.target);
   });
 
-  // window.addEventListener('keyup', e => {
-  //   if (e.key !== 'Enter' || !doingNow) return;
-  //   console.log(e.key === 'Enter', !doingNow);
-  // });
-
   $formWrap.addEventListener('click', ({ target }) => {
     if (target.matches('.close--modal')) toggleModal();
   });
 
   $formWrap.addEventListener('change', ({ target }) => {
     if (target.matches('#userImage')) showDropImage(target);
+  });
+
+  window.addEventListener('DOMContentLoaded', async () => {
+    const {
+      data: { isLogin }
+    } = await axios.get('http://localhost:8000', {
+      withCredentials: true
+    });
+    console.log(isLogin);
   });
 })();
 

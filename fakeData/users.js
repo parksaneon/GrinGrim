@@ -1,7 +1,8 @@
 let users = [
   {
     userId: 'bnb135',
-    password: '$2b$10$Vg/ijKMZKg8c/1C9RnTXduLiUvabxqH2aJ6CBoFL4xHVSn6u8R51m'
+    password: '$2b$10$Vg/ijKMZKg8c/1C9RnTXduLiUvabxqH2aJ6CBoFL4xHVSn6u8R51m',
+    nickName: 'Park'
   }
 ];
 
