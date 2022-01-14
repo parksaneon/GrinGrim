@@ -1,24 +1,50 @@
-import axios from "axios";
-import "../scss/style.scss";
+import Home from './pages/Home.js';
+import Mydrawings from './pages/Mydrawings.js';
+import Ranking from './pages/Ranking.js';
+import NotFound from './pages/NotFound.js';
 
-const $signInForm = document.getElementById("signInForm");
+const router = async (path, query) => {
+  const routes = [
+    { path: '/', view: Home },
+    { path: '/mydrawings', view: Mydrawings },
+    { path: '/ranking', view: Ranking }
+  ];
 
-const signIn = async e => {
-  try {
-    e.preventDefault();
+  const pageMatches = routes.map(route => ({
+    route,
+    isMatch: route.path === path
+  }));
 
-    const formData = new FormData($signInForm);
-    const body = {};
+  let match = pageMatches.find(pageMatch => pageMatch.isMatch);
 
-    for (const [key, value] of formData.entries()) {
-      body[key] = value;
-    }
+  if (!match) {
+    match = {
+      route: path,
+      isMatch: true
+    };
 
-    const res = await axios.post("http://localhost:8000/users/signIn", body);
-    console.log(res);
-  } catch (error) {
-    console.log(error);
+    const page = new NotFound();
+    document.querySelector('#root').innerHTML = await page.getHtml();
+  } else {
+    const page = new match.route.view();
+    document.querySelector('#root').innerHTML = await page.getHtml(query);
   }
 };
 
-$signInForm.addEventListener("submit", signIn);
+// 뒤로 가기 할 때 데이터 나오게 하기 위함
+window.addEventListener('popstate', e => {
+  router(e.state ? e.state.path : '/');
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.body.addEventListener('click', e => {
+    if (!e.target.matches('a')) return;
+    e.preventDefault();
+    const path = e.target.getAttribute('href').split('?')[0];
+    const query = e.target.getAttribute('href').split('?')[1];
+    window.history.pushState({ path }, null, path);
+    router(path, query);
+  });
+
+  router(window.location.pathname, window.location.search.substring(1));
+});

@@ -7,16 +7,11 @@
     <title>Document</title>
   </head>
   <body>
-    <main class="main">
-      <form method="post" id="signInForm" enctype="multipart/form-data">
-        <label for="userId">로그인</label>
-        <input type="text" id="userId" name="userId" placeholder="아이디" required />
-        <label for="password">비밀번호</label>
-        <input type="text" id="password" name="password" placeholder="비밀번호" required />
-        <button type="submit">로그인</button>
-      </form>
-    </main>
-    <!-- <script src="./dist/main.js"></script> -->
-    <script src="./src/js/user.js"></script>
+    <a href="/mydrawings" id="mydrawings">내 작품</a>
+    <a href="/ranking" id="ranking">랭킹</a>
+    <a href="/ranking?category=turtle" id="ranking">nested ranking</a>
+
+    <div id="root"></div>
+    <!-- <script src="./src/js/user.js"></script> -->
   </body>
 </html>
