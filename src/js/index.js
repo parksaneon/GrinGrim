@@ -1,4 +1,3 @@
-import '../scss/style.scss';
 import Home from './pages/Home.js';
 import Draw from './pages/Draw.js';
 import Result from './pages/Result.js';

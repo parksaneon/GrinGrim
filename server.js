@@ -1,7 +1,10 @@
 import express from 'express';
 import cors from 'cors';
-import multer from 'multer';
-import userRouter from './router/userRouter.js';
+import cookieParser from 'cookie-parser';
+import dotenv from 'dotenv';
+import authRouter from './router/authRouter.js';
+
+dotenv.config();
 
 const app = express();
 const port = 8000;
@@ -75,6 +78,7 @@ const categories = [
   }
 ];
 
+app.use('/auth', authRouter);
 app.use('/images', express.static('images'));
 app.use(express.urlencoded({ extended: true }));
 const corsOption = {
@@ -84,7 +88,11 @@ const corsOption = {
   credentials: true // 응답 헤더에 Access-Control-Allow-Credentials 추가
 };
 app.use(cors(corsOption));
+app.use(express.static('public'));
+app.use(cookieParser());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
 const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 },
   storage: multer.diskStorage({
@@ -97,6 +105,7 @@ const upload = multer({
   })
 });
 
+<<<<<<< HEAD
 const generateId = data => (data[data.length - 1]?.id || 0) + 1;
 const getNickname = userid => users.find(user => user.id === +userid).nickname;
 

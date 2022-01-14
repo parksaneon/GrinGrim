@@ -9,10 +9,15 @@ export default {
   entry: ['regenerator-runtime', './src/js/index.js'],
   output: {
     path: path.resolve(__dirname, './dist'),
-    filename: 'main.js'
+    filename: 'main.js',
+    assetModuleFilename: 'img/[name][ext]'
   },
   module: {
     rules: [
+      {
+        test: /\.html$/i,
+        loader: 'html-loader'
+      },
       {
         test: /\.s?css$/,
         use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader']
@@ -26,16 +31,25 @@ export default {
             presets: ['@babel/preset-env']
           }
         }
+      },
+      {
+        test: /\.(png|jpe?g|gif|svg)$/i,
+        type: 'asset/resource'
       }
     ]
   },
   devServer: {
     port: 9000,
+    compress: true,
     liveReload: true
   },
   plugins: [
     new HtmlWebpackPlugin({
+<<<<<<< HEAD
       template: 'index.html'
+=======
+      template: 'src/index.html'
+>>>>>>> upstream/develop
     }),
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
