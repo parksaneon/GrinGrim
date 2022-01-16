@@ -41,6 +41,11 @@
   flex-wrap: wrap;
   justify-content: space-between;
 
+  img {
+    width: rem(300px);
+    height: rem(300px);
+  }
+
   figcaption {
     margin: rem(10px) 0;
     display: flex;

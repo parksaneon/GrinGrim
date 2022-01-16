@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
+import multer from 'multer';
 import authRouter from './router/authRouter.js';
 
 dotenv.config();
@@ -11,11 +12,11 @@ const port = 8000;
 
 const users = [
   {
-    id: 100,
+    id: 1,
     nickname: '최한나'
   },
   {
-    id: 10,
+    id: 2,
     nickname: '박상언'
   }
 ];
@@ -23,46 +24,46 @@ const users = [
 let drawings = [
   {
     id: 1,
-    userid: 100,
-    url: '/images/drawings/canvas1.png',
+    userid: 1,
+    url: 'images/drawings/canvas1.png',
     categoryId: 1,
     likedUserId: [1, 2, 3, 4]
   },
 
   {
     id: 2,
-    userid: 10,
-    url: '/images/drawings/canvas2.png',
+    userid: 1,
+    url: 'images/drawings/canvas2.png',
     categoryId: 1,
     likedUserId: [2, 3]
   },
   {
     id: 3,
-    userid: 100,
-    url: '/images/drawings/canvas3.png',
-    categoryId: 2,
+    userid: 1,
+    url: 'images/drawings/canvas3.png',
+    categoryId: 1,
     likedUserId: []
   },
 
   {
     id: 4,
-    userid: 10,
-    url: '/images/drawings/canvas4.png',
+    userid: 2,
+    url: 'images/drawings/canvas4.png',
     categoryId: 2,
     likedUserId: [1]
   },
   {
     id: 5,
-    userid: 100,
-    url: '/images/drawings/canvas5.png',
+    userid: 2,
+    url: 'images/drawings/canvas5.png',
     categories: 2,
     likedUserId: []
   },
   {
     id: 6,
-    userid: 10,
-    url: '/images/drawings/test.jpeg',
-    categoryId: 1,
+    userid: 2,
+    url: 'images/drawings/canvas6.png',
+    categoryId: 2,
     likedUserId: [2, 3]
   }
 ];
@@ -105,7 +106,6 @@ const upload = multer({
   })
 });
 
-<<<<<<< HEAD
 const generateId = data => (data[data.length - 1]?.id || 0) + 1;
 const getNickname = userid => users.find(user => user.id === +userid).nickname;
 
@@ -135,12 +135,11 @@ app.post('/drawings', upload.single('file'), (req, res) => {
       id,
       userid: 1,
       url: req.file.destination + req.file.originalname,
-      categoryId: 2,
+      categoryId: +req.body.categoryId,
       likedUserId: []
     }
   ];
-  res.cookie('drawingId', id);
-  res.send();
+  res.send({ id });
 });
 
 app.get('/drawings/:userid', (req, res) => {
@@ -169,8 +168,7 @@ app.get('/drawings', (req, res) => {
 
 app.get('/categories', (req, res) => {
   const randomIndex = Math.floor(Math.random() * (categories.length - 0) + 0);
-  res.cookie('categoryId', categories[randomIndex].id);
-  res.send(categories[randomIndex].name);
+  res.send(categories[randomIndex]);
 });
 
 app.listen(port, () => {

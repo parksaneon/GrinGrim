@@ -1,10 +1,12 @@
 import regenerato from 'regenerator-runtime';
 import axios from 'axios';
-import render from './result.js';
 
 const $canvas = document.querySelector('.my-canvas');
 const $drawingContainer = document.querySelector('.drawing-container');
 const $timer = document.querySelector('.timer');
+const $root = document.getElementById('root');
+
+let categoryId = 0;
 
 let timer = 10;
 let isFinished = false;
@@ -27,21 +29,18 @@ const uploadCanvas = () => {
   const fileName = 'canvas' + new Date().getTime() + '.png';
   const formData = new FormData();
   formData.append('file', file, fileName);
-  try {
-    axios.post('http://localhost:8000/drawings', formData, {
-      withCredentials: true,
-      processData: false,
-      contentType: false
-    });
-  } catch (error) {
-    console.error(error);
-  }
+  formData.append('categoryId', categoryId);
+  return axios.post('http://localhost:8000/drawings', formData, {
+    withCredentials: true,
+    processData: false,
+    contentType: false
+  });
 };
 
 const run = () => {
   if (isFinished) {
     clearInterval(countdown);
-    $drawingContainer.innerHTML = `<div class="layer"></div>
+    $drawingContainer.innerHTML += `<div class="layer"></div>
 		<div class="popup">
 			<h2>게임이 종료되었어요!</h2> 
 			<p> 다른 사람들은 어떻게 그렸는지 확인하러 갈까요?</p>
@@ -58,8 +57,8 @@ const getDrawingSubject = async () => {
   try {
     const $subject = document.querySelector('.subject');
     const { data: category } = await axios.get('http://localhost:8000/categories', { withCredentials: true });
-    console.log(category);
-    $subject.textContent = `주제는 "${category}"`;
+    $subject.textContent = `주제는 "${category.name}"`;
+    categoryId = category.id;
     countdown = setInterval(run, 1000);
   } catch (error) {
     console.error(error);
@@ -68,11 +67,46 @@ const getDrawingSubject = async () => {
 
 window.addEventListener('DOMContentLoaded', getDrawingSubject);
 
-const displayResult = e => {
+const displayResult = async e => {
+  e.preventDefault();
   if (!e.target.matches('.close-popup')) return;
   try {
-    uploadCanvas();
-    render();
+    const { data: drawingId } = await uploadCanvas();
+    const { data: myDrawing } = await axios.get(`http://localhost:8000/drawings/${drawingId.id}`);
+    const { data: recentDrawingsWithNickname } = await axios.get(
+      `http://localhost:8000/drawings/category/${categoryId}?limit=4`
+    );
+    $root.innerHTML =
+      myDrawing
+        .map(
+          ({ url }) =>
+            `
+						<section class="result-container">
+						<figure>
+							<img src="http://localhost:8000/${url}" alt="내 그림" />
+						</figure>
+						<a href="/" class="fas fa-3x fa-home home"></a>
+						<p>다른 사람들은 어떻게 그렸을까요?</p>
+						<div class="drawings">
+						`
+        )
+        .join('') +
+      recentDrawingsWithNickname
+        .map(
+          drawing =>
+            `
+					<figure>
+					<img src="http://localhost:8000/${drawing.url}" alt="다른 유저 그림" />
+					<figcaption>
+						<i class="fas fa-heart like"></i>
+						<span>${drawing.likedUserId.length}</span>
+						<span class="nickname">${drawing.nickname}</span>
+					</figcaption>
+				</figure>
+				`
+        )
+        .join('') +
+      `</div></section>`;
   } catch (error) {
     console.error();
   }
