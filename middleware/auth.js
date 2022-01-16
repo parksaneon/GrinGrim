@@ -3,8 +3,6 @@ import jwt from 'jsonwebtoken';
 const isAuth = (req, res, next) => {
   try {
     const { accessToken } = req.cookies;
-    if (!accessToken) return res.status(401).json('다시 로그인해주세요.');
-
     const decoded = jwt.verify(accessToken, process.env.JWT_SECRET_KEY);
 
     if (decoded) {
@@ -13,6 +11,7 @@ const isAuth = (req, res, next) => {
       res.json({ isLogin: false });
     }
   } catch (error) {
+    console.log(error);
     res.json({ isLogin: false });
   }
 };
