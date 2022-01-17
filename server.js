@@ -102,14 +102,12 @@ app.use(express.json());
 app.use('/images', express.static('images'));
 app.use('/auth', authRouter);
 
-
-const getNickname = userid => users.find(user => user.id === +userid).nickname;
-
 app.get('/category', (req, res) => {
   const categoryName = req.query.category;
   const categoryId = categories.find(category => category.name === categoryName).id;
-
   res.send(`${categoryId}`);
+});
+
 const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 },
   storage: multer.diskStorage({
@@ -168,7 +166,7 @@ app.post('/drawings', upload.single('file'), (req, res) => {
       id,
       userid: 1,
       url: req.file.destination + req.file.originalname,
-      categoryId: +req.body.categoryId,
+      categoryId: req.body.categoryId,
       likedUserId: []
     }
   ];
