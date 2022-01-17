@@ -12,6 +12,7 @@ const isAuth = (req, res, next) => {
     }
   } catch (error) {
     console.log(error);
+    console.log('인증 기간이 만료됐습니다.');
     res.json({ isLogin: false });
   }
 };

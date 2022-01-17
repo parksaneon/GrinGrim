@@ -7,12 +7,6 @@ const user = (() => {
   const $formWrap = document.querySelector('.form--wrap');
   let doingNow = null;
 
-  // const routes = {
-  //   '/': 'http://localhost:8000',
-  //   '/service': '/data/service.json',
-  //   '/about': '/data/about.html'
-  // };
-
   const userSignUp = {
     isValidId: false,
     isValidPwd: false
@@ -40,6 +34,7 @@ const user = (() => {
       } = await axios.get('http://localhost:8000', {
         withCredentials: true
       });
+
       if (isLogin) {
         renderLogin();
       } else {
