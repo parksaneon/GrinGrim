@@ -2,21 +2,19 @@ import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
-import authRouter from './router/authRouter.js';
 import path from 'path';
 import history from 'connect-history-api-fallback';
+import authRouter from './router/authRouter.js';
 
 dotenv.config();
 
-// import userRouter from './router/userRouter.js';
+const __dirname = path.resolve();
 
-// const __dirname = path.resolve();
-
-// const app = express();
-// const port = 8000;
+const app = express();
+const port = 8000;
 
 const corsOption = {
-  origin: '*', // 접근 권한을 부여하는 도메인
+  origin: 'http://localhost:9000', // 접근 권한을 부여하는 도메인
   optionsSuccessStatus: 200, // 응답 상태 200으로 설정
   credentials: true // 응답 헤더에 Access-Control-Allow-Credentials 추가
 };
@@ -26,6 +24,7 @@ app.use(cors(corsOption));
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use('/images', express.static('images'));
 
 app.use('/auth', authRouter);
 const users = [
@@ -74,14 +73,6 @@ const categories = [
   }
 ];
 
-
-const app = express();
-
-const __dirname = path.resolve();
-app.use('/static', express.static(path.resolve(__dirname, '/', 'static')));
-app.use(cors());
-app.use('/images', express.static('images'));
-
 const getNickname = userid => users.find(user => user.id === +userid).nickname;
 
 app.get('/category', (req, res) => {
@@ -113,6 +104,11 @@ app.get('/drawings/category/:categoryid', (req, res) => {
   }));
 
   res.send(drawingsWithNickname);
+});
+
+app.get('/category/random', (req, res) => {
+  const randomIndex = Math.floor(Math.random() * categories.length - 0);
+  res.send(categories[randomIndex]);
 });
 
 app.get('/*', (req, res) => {
