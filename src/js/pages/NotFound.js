@@ -1,11 +1,15 @@
-export default class {
-  constructor() {
-    document.title = '404 Not found';
-  }
+export default () => ({
+  getData() {
+    return { data: null };
+  },
 
-  async getHtml() {
+  getHtml() {
     return `
-            <h1>404 Not found</h1>
-        `;
+      <h1>찾으시는 페이지가 없습니다.</h1>
+    `;
+  },
+
+  eventBinding() {
+    return null;
   }
-}
+});
