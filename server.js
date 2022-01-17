@@ -3,7 +3,9 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import multer from 'multer';
+
 import authRouter from './router/authRouter.js';
+import isAuth from './middleware/auth.js';
 
 dotenv.config();
 
@@ -171,6 +173,10 @@ app.get('/categories', (req, res) => {
   res.send(categories[randomIndex]);
 });
 
+app.get('/', isAuth, (req, res) => {
+  res.json({ isLogin: true });
+});
+
 app.listen(port, () => {
-  console.log('hi2');
+  console.log('server listening');
 });

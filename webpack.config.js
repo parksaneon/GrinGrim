@@ -9,6 +9,7 @@ export default {
   entry: ['regenerator-runtime', './src/js/index.js'],
   output: {
     path: path.resolve(__dirname, './dist'),
+    publicPath: '/',
     filename: 'main.js',
     assetModuleFilename: 'img/[name][ext]'
   },
