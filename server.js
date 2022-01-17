@@ -168,7 +168,7 @@ app.get('/drawings', (req, res) => {
   res.send(sortedDrawings);
 });
 
-app.get('/categories/random', (req, res) => {
+app.get('/category/random', (req, res) => {
   const randomIndex = Math.floor(Math.random() * categories.length - 0);
   res.send(categories[randomIndex]);
 });
