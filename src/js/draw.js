@@ -78,8 +78,9 @@ const displayResult = async e => {
     const { data: drawingId } = await uploadCanvas();
     const { data: myDrawing } = await axios.get(`http://localhost:8000/drawings/${drawingId.id}`);
     const { data: recentDrawingsWithNickname } = await axios.get(
-      `http://localhost:8000/drawings/category/${categoryId}?limit=4`
+      `http://localhost:8000/drawings/category/${categoryId}?drawingId=${drawingId.id}`
     );
+
     $root.innerHTML =
       myDrawing
         .map(
@@ -111,8 +112,6 @@ const displayResult = async e => {
         )
         .join('') +
       `</div></section>`;
-    // const path = e.target.getAttribute('href');
-    // window.history.pushState({ path }, null, path);
   } catch (error) {
     console.error();
   }
