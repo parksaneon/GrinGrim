@@ -30,11 +30,15 @@ const uploadCanvas = () => {
   const formData = new FormData();
   formData.append('file', file, fileName);
   formData.append('categoryId', categoryId);
-  return axios.post('http://localhost:8000/drawings', formData, {
-    withCredentials: true,
-    processData: false,
-    contentType: false
-  });
+  try {
+    return axios.post('http://localhost:8000/drawings', formData, {
+      withCredentials: true,
+      processData: false,
+      contentType: false
+    });
+  } catch (error) {
+    return console.error(error);
+  }
 };
 
 const run = () => {
@@ -107,6 +111,8 @@ const displayResult = async e => {
         )
         .join('') +
       `</div></section>`;
+    // const path = e.target.getAttribute('href');
+    // window.history.pushState({ path }, null, path);
   } catch (error) {
     console.error();
   }

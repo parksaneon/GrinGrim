@@ -45,11 +45,7 @@ export default {
   },
   plugins: [
     new HtmlWebpackPlugin({
-<<<<<<< HEAD
-      template: 'index.html'
-=======
       template: 'src/index.html'
->>>>>>> upstream/develop
     }),
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
