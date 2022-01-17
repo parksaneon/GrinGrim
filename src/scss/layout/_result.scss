@@ -1,0 +1,62 @@
+@use '../utils/' as *;
+@use '../base/' as *;
+
+.result-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  border-radius: rem(30px);
+  width: 80vw;
+  min-width: calc(520px + 2%);
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: rem(50px);
+  padding: 2%;
+
+  figure {
+    margin-top: rem(50px);
+    align-self: center;
+  }
+  .home {
+    position: absolute;
+    padding: 2%;
+    top: calc(50px - 2%);
+    right: rem(50px);
+    color: #ff9704;
+  }
+  p {
+    font-size: 2rem;
+    margin-top: rem(50px);
+  }
+  img {
+    border: 1px solid black;
+  }
+}
+
+.drawings {
+  display: flex;
+  width: 100%;
+  margin-bottom: rem(50px);
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  img {
+    width: rem(300px);
+    height: rem(300px);
+  }
+
+  figcaption {
+    margin: rem(10px) 0;
+    display: flex;
+    font-size: 1.6rem;
+  }
+  .like {
+    color: red;
+    margin-right: rem(10px);
+  }
+  .nickname {
+    flex-grow: 1;
+    text-align: center;
+  }
+}
