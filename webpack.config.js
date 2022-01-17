@@ -42,7 +42,13 @@ export default {
   devServer: {
     port: 9000,
     compress: true,
-    liveReload: true
+    liveReload: true,
+    historyApiFallback: true,
+    proxy: {
+      '/drawings': 'http://localhost:8000',
+      '/images': 'http://localhost:8000',
+      '/category': 'http://localhost:8000'
+    }
   },
   plugins: [
     new HtmlWebpackPlugin({

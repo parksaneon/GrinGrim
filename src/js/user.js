@@ -156,13 +156,7 @@ const user = (() => {
 
     timer = setTimeout(async () => {
       try {
-        const res = await axios.post(
-          `http://localhost:8000/auth/checkId`,
-          { tempId },
-          {
-            withCredentials: true
-          }
-        );
+        const res = await axios.post(`http://localhost:8000/auth/checkId`, { tempId }, { withCredentials: true });
         if (res.status === 201) {
           idInformText.innerText = '사용 가능한 아이디 입니다.';
           userSignUp.isValidId = true;
