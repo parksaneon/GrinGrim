@@ -1,6 +1,7 @@
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import CopyWebPackPlugin from 'copy-webpack-plugin';
 import path from 'path';
 
 const __dirname = path.resolve();
@@ -51,6 +52,9 @@ export default {
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
       filename: 'index.css'
+    }),
+    new CopyWebPackPlugin({
+      patterns: [{ from: './src/images', to: 'img' }]
     })
   ],
   mode: 'development'
