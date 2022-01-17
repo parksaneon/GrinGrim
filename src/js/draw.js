@@ -129,22 +129,24 @@ const draw = e => {
     ctx.lineTo(x, y);
     ctx.stroke();
   } else {
-    ctx.beginPath();
     ctx.moveTo(x, y);
   }
 };
 
 const startDrawing = () => {
   isDrawing = true;
+  ctx.beginPath();
 };
 
 const finishDrawing = () => {
   isDrawing = false;
+  ctx.closePath();
 };
 
 $canvas.addEventListener('mousemove', draw);
 $canvas.addEventListener('mousedown', startDrawing);
 $canvas.addEventListener('mouseup', finishDrawing);
+$canvas.addEventListener('mouseleave', finishDrawing);
 
 // 모바일
 $canvas.addEventListener('touchmove', draw);
