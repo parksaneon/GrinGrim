@@ -123,8 +123,8 @@ const ctx = $canvas.getContext('2d');
 let isDrawing = false;
 
 const draw = e => {
-  const x = e.offsetX;
-  const y = e.offsetY;
+  const x = e.type === 'touchmove' ? e.changedTouches[0].pageX - e.target.getBoundingClientRect().left : e.offsetX;
+  const y = e.type === 'touchmove' ? e.changedTouches[0].pageY - e.target.getBoundingClientRect().top : e.offsetY;
   if (isDrawing) {
     ctx.lineTo(x, y);
     ctx.stroke();
@@ -145,3 +145,9 @@ const finishDrawing = () => {
 $canvas.addEventListener('mousemove', draw);
 $canvas.addEventListener('mousedown', startDrawing);
 $canvas.addEventListener('mouseup', finishDrawing);
+
+// 모바일
+$canvas.addEventListener('touchmove', draw);
+$canvas.addEventListener('touchstart', startDrawing);
+$canvas.addEventListener('touchend', finishDrawing);
+$canvas.addEventListener('touchcancel', finishDrawing);
