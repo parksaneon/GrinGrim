@@ -3,12 +3,51 @@ import axios from 'axios';
 const user = (() => {
   const $body = document.querySelector('body');
   const $main = document.querySelector('.main');
+  const $buttonWrap = document.querySelector('.bottom--section');
   const $formWrap = document.querySelector('.form--wrap');
   let doingNow = null;
+
+  // const routes = {
+  //   '/': 'http://localhost:8000',
+  //   '/service': '/data/service.json',
+  //   '/about': '/data/about.html'
+  // };
 
   const userSignUp = {
     isValidId: false,
     isValidPwd: false
+  };
+
+  const renderLogin = () => {
+    $buttonWrap.innerHTML = `
+      <button class="">시작하기</button>
+      <button class="">명예의 전당</button>
+      <button class="">내 작품</button>
+    `;
+  };
+
+  const renderNotLogin = () => {
+    $buttonWrap.innerHTML = `
+      <button class="open--signForm signIn--open">로그인</button>  
+      <button class="open--signForm signUp--open">회원가입</button>
+    `;
+  };
+
+  const renderIndex = async () => {
+    try {
+      const {
+        data: { isLogin }
+      } = await axios.get('http://localhost:8000', {
+        withCredentials: true
+      });
+      if (isLogin) {
+        renderLogin();
+      } else {
+        renderNotLogin();
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const toggleModal = () => {
@@ -76,7 +115,8 @@ const user = (() => {
         return acc;
       }, {});
       const res = await sendUserReq(formData);
-      if (res.status === 201) history.pushState({ data: 'some data' }, '로그인 성공', '/');
+      if (res.status === 201) renderLogin();
+      toggleModal();
       doingNow = null;
     } catch (error) {
       console.error(error);
@@ -88,7 +128,8 @@ const user = (() => {
     try {
       const formData = new FormData(formElement);
       const res = await sendUserReq(formData);
-      if (res.status === 201) history.pushState({ data: 'some data' }, '회원가입 성공', '/');
+      if (res.status === 201) renderLogin();
+      toggleModal();
       doingNow = null;
     } catch (error) {
       console.error(error);
@@ -195,6 +236,10 @@ const user = (() => {
 
   $formWrap.addEventListener('change', ({ target }) => {
     if (target.matches('#userImage')) showDropImage(target);
+  });
+
+  window.addEventListener('DOMContentLoaded', () => {
+    renderIndex();
   });
 })();
 
