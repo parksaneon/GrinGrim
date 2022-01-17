@@ -60,7 +60,7 @@ const run = () => {
 const getDrawingSubject = async () => {
   try {
     const $subject = document.querySelector('.subject');
-    const { data: category } = await axios.get('http://localhost:8000/categories', { withCredentials: true });
+    const { data: category } = await axios.get('http://localhost:8000/categories/random', { withCredentials: true });
     $subject.textContent = `주제는 "${category.name}"`;
     categoryId = category.id;
     countdown = setInterval(run, 1000);
