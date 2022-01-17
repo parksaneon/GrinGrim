@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
     const path = e.target.getAttribute('href').split('?')[0];
     const query = e.target.getAttribute('href').split('?')[1];
-    window.history.pushState({ path }, null, path);
+    window.history.pushState({ path }, null, `${path}${query ? '?' + query : ''}`);
     render($root, path, query);
   });
 
