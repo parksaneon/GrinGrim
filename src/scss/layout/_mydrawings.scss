@@ -1,2 +1,92 @@
 @use '../utils/' as *;
 @use '../base/' as *;
+
+.mydrawings-container {
+  position: relative;
+  background: rgba(254, 235, 182, 1);
+  background-position: bottom;
+  background-size: 20%;
+  border-radius: rem(30px);
+  width: 80vw;
+  min-width: calc(990px + 4%);
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: rem(50px);
+  padding: 2%;
+
+  .title {
+    font-size: 2rem;
+    font-weight: bold;
+
+    margin: rem(50px) 0;
+  }
+
+  .drawings {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: space-around;
+  }
+  .img-container {
+    border: 15px solid rgba(255, 207, 140, 1);
+    border-radius: 10px;
+    margin-bottom: rem(15px);
+  }
+  img {
+    width: rem(300px);
+    height: rem(300px);
+    background-color: #fff;
+  }
+  figcaption {
+    background: #fff;
+    width: 50%;
+    margin: 30px auto;
+    padding: 2%;
+    font-size: 1.2rem;
+    * {
+      margin: 10px 0;
+    }
+  }
+  .icon-giraffe {
+    position: absolute;
+    right: 0;
+    bottom: 0px;
+    background-color: transparent;
+  }
+}
+
+.message {
+  position: relative;
+  width: rem(500px);
+  height: rem(200px);
+  padding: 2%;
+  margin: 10% auto;
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 207, 140, 1);
+  font-size: 1.4rem;
+  border-radius: 30px;
+  &::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    width: 0;
+    height: 0;
+    border: 20px solid transparent;
+    border-left-color: rgba(255, 207, 140, 1);
+    border-right: 0;
+    border-bottom: 0;
+    margin-top: -10px;
+    margin-right: -20px;
+  }
+  span {
+    margin-bottom: 10px;
+  }
+  span:nth-child(1) {
+    margin-bottom: 20px;
+    color: #ff9704;
+    font-size: 2rem;
+    font-weight: bold;
+  }
+}

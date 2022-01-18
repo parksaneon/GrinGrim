@@ -36,7 +36,6 @@ drawingsRouter.get('/', (req, res) => {
 
 drawingsRouter.get('/userid/:userid', (req, res) => {
   const { userid } = req.params;
-  console.log(newDrawingsWithUNickName(findDrawingsById(userid), getNickname(userid)));
 
   res.send(newDrawingsWithUNickName(findDrawingsById(userid), getNickname(userid)));
 });
