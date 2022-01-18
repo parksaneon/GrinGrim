@@ -1,6 +1,6 @@
 @use '../utils/' as *;
 
-.wrap {
+#root {
   display: flex;
   position: relative;
   flex-direction: row;
