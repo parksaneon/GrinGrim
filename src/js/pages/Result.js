@@ -7,7 +7,9 @@ export default () => ({
     const categoryId = category.split('=')[1];
 
     const { data: myDrawing } = await axios.get(`/drawings/${drawingId}`);
-    const { data: recentDrawingsWithNickname } = await axios.get(`/drawings/category/${categoryId}?limit=4`);
+    const { data: recentDrawingsWithNickname } = await axios.get(
+      `/drawings/category/${categoryId}?sortBy=date&drawingId!=${drawingId}`
+    );
     return { data: { myDrawing, recentDrawingsWithNickname } };
   },
 
