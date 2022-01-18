@@ -1,6 +1,7 @@
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import CopyWebPackPlugin from 'copy-webpack-plugin';
 import path from 'path';
 import CopyPlugin from 'copy-webpack-plugin';
 
@@ -10,7 +11,7 @@ export default {
   entry: ['regenerator-runtime', './src/js/index.js'],
   output: {
     path: path.resolve(__dirname, './dist'),
-    publicPath: '/',
+    // publicPath: '/',
     filename: 'main.js',
     assetModuleFilename: 'img/[name][ext]'
   },
@@ -48,7 +49,8 @@ export default {
     proxy: {
       '/drawings': 'http://localhost:8000',
       '/images': 'http://localhost:8000',
-      '/category': 'http://localhost:8000'
+      '/category': 'http://localhost:8000',
+      '/auth': 'http://localhost:8000'
     }
   },
   plugins: [
@@ -59,7 +61,7 @@ export default {
     new MiniCssExtractPlugin({
       filename: 'index.css'
     }),
-    new CopyPlugin({
+    new CopyWebPackPlugin({
       patterns: [{ from: './src/img', to: 'img' }]
     })
   ],

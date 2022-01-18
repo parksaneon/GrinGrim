@@ -78,9 +78,8 @@ const displayResult = async e => {
     const { data: drawingId } = await uploadCanvas();
     const { data: myDrawing } = await axios.get(`http://localhost:8000/drawings/${drawingId.id}`);
     const { data: recentDrawingsWithNickname } = await axios.get(
-      `http://localhost:8000/drawings/category/${categoryId}?drawingId=${drawingId.id}`
+      `http://localhost:8000/drawings/category/${categoryId}?limit=4`
     );
-
     $root.innerHTML =
       myDrawing
         .map(
@@ -112,6 +111,8 @@ const displayResult = async e => {
         )
         .join('') +
       `</div></section>`;
+    // const path = e.target.getAttribute('href');
+    // window.history.pushState({ path }, null, path);
   } catch (error) {
     console.error();
   }
@@ -123,33 +124,25 @@ const ctx = $canvas.getContext('2d');
 let isDrawing = false;
 
 const draw = e => {
-  const x = e.type === 'touchmove' ? e.changedTouches[0].pageX - e.target.getBoundingClientRect().left : e.offsetX;
-  const y = e.type === 'touchmove' ? e.changedTouches[0].pageY - e.target.getBoundingClientRect().top : e.offsetY;
+  const x = e.offsetX;
+  const y = e.offsetY;
   if (isDrawing) {
     ctx.lineTo(x, y);
     ctx.stroke();
   } else {
+    ctx.beginPath();
     ctx.moveTo(x, y);
   }
 };
 
 const startDrawing = () => {
   isDrawing = true;
-  ctx.beginPath();
 };
 
 const finishDrawing = () => {
   isDrawing = false;
-  ctx.closePath();
 };
 
 $canvas.addEventListener('mousemove', draw);
 $canvas.addEventListener('mousedown', startDrawing);
 $canvas.addEventListener('mouseup', finishDrawing);
-$canvas.addEventListener('mouseleave', finishDrawing);
-
-// 모바일
-$canvas.addEventListener('touchmove', draw);
-$canvas.addEventListener('touchstart', startDrawing);
-$canvas.addEventListener('touchend', finishDrawing);
-$canvas.addEventListener('touchcancel', finishDrawing);
