@@ -143,13 +143,14 @@ const drawingsSortedByDate = drawings => drawings.sort((drawing1, drawing2) => d
 
 app.get('/drawings/category/:categoryid', (req, res) => {
   const { categoryid } = req.params;
-  const { sortBy } = req.query;
+  const { sortBy, drawingId } = req.query;
   const drawingsFilterByCategoryId = drawings.filter(drawing => drawing.categoryId === +categoryid);
+  const drawingsFilterByDrawingId = drawingsFilterByCategoryId.filter(({ id }) => id !== +drawingId);
   // drawing.id !== +drawingId
   const drawingsSortedBy =
     sortBy === 'date'
-      ? drawingsSortedByDate(drawingsFilterByCategoryId)
-      : drawingsSortedByLiked(drawingsFilterByCategoryId);
+      ? drawingsSortedByDate(drawingsFilterByDrawingId)
+      : drawingsSortedByLiked(drawingsFilterByDrawingId);
   const drawingsWithNickname = drawingsSortedBy.map(drawing => ({
     ...drawing,
     nickname: getNickname(drawing.userId)
