@@ -21,17 +21,36 @@ export default () => ({
   },
 
   getHtml(mydrawings) {
-    return mydrawings
-      .map(
-        ({ id, categoryName, likedUserId, url, nickname }) => `
-            <img src="${url}">
-            <div>아이디: ${id}</div>
-            <div>카테고리: ${categoryName}</div>
-            <div>좋아요: ${likedUserId.length}</div>
-            <div>닉네임: ${nickname}</div>
-      `
-      )
-      .join('');
+    return `<section class="mydrawings-container">
+		<h2 class="title">내 작품 보기</h2>
+		<div class="drawings">${
+      mydrawings.length
+        ? mydrawings
+            .map(
+              ({ categoryName, likedUserId, url }) => `
+					<figure>
+					<div class="img-container">
+						<img src="${url}">
+					</div>
+					<figcaption>
+					<p>주제: ${categoryName}</p>
+					<i class="fas fa-heart like"></i>
+					<span>${likedUserId.length}</span>
+					</figcaption>
+					</figure>
+			`
+            )
+            .join('')
+        : `<div class="message">
+						<span>이런!</span>
+						<span>아직 활동 내역이 없어요.</span>
+						<span>나만의 작품을 만들어 볼까요?</span>
+						</div>
+						<img src="/img/icon-giraffe.svg" alt="기린" class="icon-giraffe"></img>`
+    }
+      </div>
+		<a href="/" class="fas fa-3x fa-home home"></a>
+		</section>`;
   },
 
   eventBinding() {
