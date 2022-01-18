@@ -139,9 +139,12 @@ app.get('/drawings/:drawingid', (req, res) => {
 
 app.get('/drawings/category/:categoryid', (req, res) => {
   const { categoryid } = req.params;
-  const { limit } = req.query;
-  const drawingsFilterCategory = drawings.filter(drawing => drawing.categoryId === +categoryid);
-  const recentDrawings = drawingsFilterCategory.sort((drawing1, drawing2) => drawing2.id - drawing1.id).slice(0, limit);
+  const { drawingId } = req.query;
+  const drawingsFilterCategory = drawings.filter(
+    drawing => drawing.categoryId === +categoryid && drawing.id !== +drawingId
+  );
+
+  const recentDrawings = drawingsFilterCategory.sort((drawing1, drawing2) => drawing2.id - drawing1.id).slice(0, 4);
   const recentDrawingsWithNickname = recentDrawings.map(drawing => ({
     ...drawing,
     nickname: getNickname(drawing.userId)
