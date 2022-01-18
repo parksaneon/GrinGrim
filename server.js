@@ -128,19 +128,25 @@ app.get('/drawings/:drawingid', (req, res) => {
   res.send(drawings.filter(({ id }) => id === +drawingid));
 });
 
+const drawingsSortedByLiked = drawings =>
+  drawings.sort((drawing1, drawing2) => drawing2.likedUserId.length - drawing1.likedUserId.length);
+
+const drawingsSortedByDate = drawings => drawings.sort((drawing1, drawing2) => drawing2.id - drawing1.id);
+
 app.get('/drawings/category/:categoryid', (req, res) => {
   const { categoryid } = req.params;
-  const { drawingId } = req.query;
-  const drawingsFilterCategory = drawings.filter(
-    drawing => drawing.categoryId === +categoryid && drawing.id !== +drawingId
-  );
-
-  const recentDrawings = drawingsFilterCategory.sort((drawing1, drawing2) => drawing2.id - drawing1.id).slice(0, 4);
-  const recentDrawingsWithNickname = recentDrawings.map(drawing => ({
+  const { sortBy } = req.query;
+  const drawingsFilterByCategoryId = drawings.filter(drawing => drawing.categoryId === +categoryid);
+  // drawing.id !== +drawingId
+  const drawingsSortedBy =
+    sortBy === 'date'
+      ? drawingsSortedByDate(drawingsFilterByCategoryId)
+      : drawingsSortedByLiked(drawingsFilterByCategoryId);
+  const drawingsWithNickname = drawingsSortedBy.map(drawing => ({
     ...drawing,
     nickname: getNickname(drawing.userid)
   }));
-  res.send(recentDrawingsWithNickname);
+  res.send(drawingsWithNickname);
 });
 
 app.get('/drawings', (req, res) => {
@@ -187,19 +193,12 @@ app.get('/drawings/userid/:userid', (req, res) => {
   res.send(drawingsWithNickname);
 });
 
-app.get('/drawings/category/:categoryid', (req, res) => {
-  const { categoryid } = req.params;
-  const drawingsFilterByCategoryId = drawings.filter(drawing => drawing.categoryid === +categoryid);
-  const drawingsSortedByLiked = drawingsFilterByCategoryId.sort(
-    (drawing1, drawing2) => drawing2.likedUserId.length - drawing1.likedUserId.length
-  );
+app.get('/category/:id/name', (req, res) => {
+  const { id } = req.params;
 
-  const drawingsWithNickname = drawingsSortedByLiked.map(drawing => ({
-    ...drawing,
-    nickname: getNickname(drawing.userid)
-  }));
+  const { name } = categories.find(category => category.id === +id);
 
-  res.send(drawingsWithNickname);
+  res.send(`${name}`);
 });
 
 app.get('/category/random', (req, res) => {
