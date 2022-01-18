@@ -5,51 +5,39 @@ export default () => ({
     query = query || 'categoryId=1';
     const categoryId = query.split('=')[1];
     const { data: categoryName } = await axios.get(`category/${categoryId}/name`);
-    const { data: ranking } = await axios.get(`drawings/category/${categoryId}`);
+    const { data: ranking } = await axios.get(`drawings/category/${categoryId}?sortBy=like`);
     return { data: { categoryName, ranking } };
   },
 
   getHtml({ ranking, categoryName }) {
-    console.log(categoryName);
-    return ranking
-      .map(
-        ({ id, categoryid, likedUserId, url, nickname }) => `
-              <img src="${url}">
-              <div>아이디: ${id}</div>
-              <div>카테고리 아이디: ${categoryid}</div>
-              <div>좋아요: ${likedUserId.length}</div>
-              <div>닉네임: ${nickname}</div>
+    return (
+      `<section class="ranking-container">
+				<h2 class="category-title">주제: ${categoryName}</h2>
+				<div class="drawings">` +
+      ranking
+        .map(
+          ({ likedUserId, url, nickname }) => `
+					<figure>
+					<div class="img-container">
+						<img src="${url}">
+					</div>
+					<figcaption>
+					
+					<i class="fas fa-heart like"></i>
+          <span>${likedUserId.length}</span>
+					<span class="nickname">${nickname}</span>
+					</figcaption>
+					</figure>
           `
-      )
-      .join('');
+        )
+        .join('') +
+      `</div>
+			<a href="/" class="fas fa-3x fa-home home"></a>
+			</section>`
+    );
   },
 
   eventBinding() {
     return null;
   }
 });
-
-// import axios from 'axios';
-
-// export default class {
-//   constructor() {
-//     document.title = 'Ranking';
-//   }
-
-//   async getHtml(query) {
-//     query = query || 'category=turtle';
-//     const category = query.split('=')[1];
-
-//     return ranking
-//       .map(
-//         ({ id, categoryid, likedUserId, url, nickname }) => `
-//         <img src="${url}">
-//         <div>아이디: ${id}</div>
-//         <div>카테고리 아이디: ${categoryid}</div>
-//         <div>좋아요: ${likedUserId.length}</div>
-//         <div>닉네임: ${nickname}</div>
-//     `
-//       )
-//       .join('');
-//   }
-// }

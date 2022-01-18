@@ -3,6 +3,7 @@ import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import CopyWebPackPlugin from 'copy-webpack-plugin';
 import path from 'path';
+import CopyPlugin from 'copy-webpack-plugin';
 
 const __dirname = path.resolve();
 
