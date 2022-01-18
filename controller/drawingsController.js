@@ -1,49 +1,64 @@
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
-import { findUserById, addNewUser } from '../fakeData/users.js';
+import {
+  addNewDrawing,
+  newDrawingsWithDNickName,
+  findDrawingsByCategory,
+  findDrawingById,
+  setDrawingLikedById,
+  findDrawingsByDrawId,
+  drawingsSortedByDate,
+  drawingsSortedByLiked,
+  generateDrawingId
+} from '../fakeData/drawings.js';
 
-const createToken = userId =>
-  jwt.sign({ userId }, process.env.JWT_SECRET_KEY, { expiresIn: process.env.ACCESS_EXPIRE });
-
-const setTokenInCookie = (res, accessToken) => {
-  res.cookie('accessToken', accessToken, {
-    maxAge: 1000 * 60 * 60 * 24,
-    httpOnly: true
-  });
+export const sendDrawingsByCategory = (req, res) => {
+  const { category } = req.query;
+  res.send(drawingsSortedByLiked(newDrawingsWithDNickName(findDrawingsByCategory(category))));
 };
 
-export const checkId = (req, res) => {
-  const { tempId } = req.body;
-  const foundedUser = findUserById(tempId);
-
-  if (foundedUser) res.status(403).json({ message: '이미 존재하는 아이디 입니다.' });
-  else res.status(201).json({ message: '사용 가능한 아이디 입니다.' });
+export const sendDrawingsByDrwaingId = (req, res) => {
+  const { drawingid } = req.params;
+  res.send(findDrawingsByDrawId(drawingid));
 };
 
-export const signUp = (req, res) => {
-  const { userId, password, nickName } = req.body;
-  const { path: userImage } = req.file;
-  const hashedPassword = bcrypt.hashSync(password, 10);
-
-  addNewUser({ userId, password: hashedPassword, nickName, userImage });
-
-  const accessToken = createToken(userId);
-  setTokenInCookie(res, accessToken);
-
-  res.status(201).json({ nickName });
+export const sendDrawingsByUserId = (req, res) => {
+  const { drawingid } = req.params;
+  res.send(findDrawingsByDrawId(drawingid));
 };
 
-export const signIn = (req, res) => {
-  const { userId, password } = req.body;
+export const sendDrawingsByCategoryId = (req, res) => {
+  const { categoryid } = req.params;
+  const { drawingId, sortBy } = req.query;
+  const drawingsFilterByDrawingId = findDrawingsByDrawId(drawingId, findDrawingsByCategory(categoryid));
+  // drawing.id !== +drawingId
+  const drawingsSortedBy =
+    sortBy === 'date'
+      ? drawingsSortedByDate(drawingsFilterByDrawingId)
+      : drawingsSortedByLiked(drawingsFilterByDrawingId);
 
-  const findUser = findUserById(userId);
-  if (!findUser) return res.status(401).json({ message: '사용자 정보가 일치하지 않습니다.' });
+  res.send(newDrawingsWithDNickName(drawingsSortedBy));
+};
 
-  const isValidPassword = bcrypt.compareSync(password, findUser.password);
-  if (!isValidPassword) return res.status(401).json({ message: '사용자 정보가 일치하지 않습니다.' });
+export const addDrawing = (req, res) => {
+  console.log('UPLOAD SUCCESS!', req.file);
+  const id = generateDrawingId();
+  const { userId, categoryId } = req.body;
+  const newDrawing = {
+    id,
+    userId,
+    url: req.file.destination + req.file.originalname,
+    categoryId,
+    likedUserId: []
+  };
 
-  const accessToken = createToken(userId);
-  setTokenInCookie(res, accessToken);
+  addNewDrawing(newDrawing);
+  res.send({ id });
+};
 
-  res.status(201).json({ nickName: findUser.nickName });
+export const editDrawingById = (req, res) => {
+  const { id } = req.params;
+  const { userid } = req.body;
+  const { likedUserId } = findDrawingById(id);
+
+  setDrawingLikedById(id, userid);
+  res.send(likedUserId);
 };
