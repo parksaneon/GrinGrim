@@ -11,15 +11,12 @@ let users = [
   }
 ];
 
+export const getUsers = () => users;
 export const findUserById = userId => users.find(user => user.userId === userId);
-
-export const getNickname = userId => users.find(user => user.id === +userId).nickName;
-
+export const getNickname = userId => findUserById(userId).nickName;
 export const addNewUser = newUser => {
   users = [newUser, ...users];
 };
-
-export const getUsers = () => users;
 
 // export const setRefreshTokenById = (userId, refreshToken) => {
 //   findUserById(userId).refreshToken = refreshToken;

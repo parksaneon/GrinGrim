@@ -8,7 +8,6 @@ export const sendCategory = (req, res) => {
 export const sendCategoryName = (req, res) => {
   const { id } = req.params;
   const { name } = fintCategoryById(id);
-
   res.send(`${name}`);
 };
 
