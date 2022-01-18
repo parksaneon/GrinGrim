@@ -8,13 +8,12 @@
   background-size: 20%;
   border-radius: rem(30px);
   width: 80vw;
-  height: 80vh;
+  height: 100vh;
   min-width: calc(990px + 4%);
   margin-left: auto;
   margin-right: auto;
   margin-top: rem(50px);
   padding: 2%;
-  padding-bottom: 0;
 
   figure:nth-child(2) {
     order: -1;
