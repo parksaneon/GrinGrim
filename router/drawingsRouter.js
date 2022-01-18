@@ -8,6 +8,7 @@ import {
   findDrawingById,
   setDrawingLikedById,
   findDrawingsById,
+  findDrawingsByDrawId,
   drawingsSortedByDate,
   drawingsSortedByLiked,
   generateDrawingId
@@ -30,25 +31,28 @@ const upload = multer({
 
 drawingsRouter.get('/', (req, res) => {
   const { category } = req.query;
-
   res.send(drawingsSortedByLiked(newDrawingsWithDNickName(findDrawingsByCategory(category))));
+});
+
+drawingsRouter.get('/:drawingid', (req, res) => {
+  const { drawingid } = req.params;
+  res.send(findDrawingsByDrawId(drawingid));
 });
 
 drawingsRouter.get('/userid/:userid', (req, res) => {
   const { userid } = req.params;
-
   res.send(newDrawingsWithUNickName(findDrawingsById(userid), getNickname(userid)));
 });
 
 drawingsRouter.get('/category/:categoryid', (req, res) => {
   const { categoryid } = req.params;
-  const { sortBy } = req.query;
-  const drawingsFilterByCategoryId = findDrawingsByCategory(categoryid);
+  const { drawingId, sortBy } = req.query;
+  const drawingsFilterByDrawingId = findDrawingsByDrawId(drawingId, findDrawingsByCategory(categoryid));
   // drawing.id !== +drawingId
   const drawingsSortedBy =
     sortBy === 'date'
-      ? drawingsSortedByDate(drawingsFilterByCategoryId)
-      : drawingsSortedByLiked(drawingsFilterByCategoryId);
+      ? drawingsSortedByDate(drawingsFilterByDrawingId)
+      : drawingsSortedByLiked(drawingsFilterByDrawingId);
 
   res.send(newDrawingsWithDNickName(drawingsSortedBy));
 });

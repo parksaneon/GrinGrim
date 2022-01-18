@@ -9,5 +9,6 @@ const categories = [
   }
 ];
 
+export const getCategories = () => categories;
 export const randomIndex = () => Math.floor(Math.random() * categories.length - 0);
 export const fintCategoryById = id => categories.find(category => category.id === +id);
