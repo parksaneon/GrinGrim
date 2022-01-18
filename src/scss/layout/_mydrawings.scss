@@ -18,7 +18,7 @@
     font-size: 2rem;
     font-weight: bold;
 
-    margin: rem(100px) 0;
+    margin: rem(50px) 0;
   }
 
   .drawings {
@@ -40,7 +40,7 @@
   figcaption {
     background: #fff;
     width: 50%;
-    margin: 0 auto;
+    margin: 30px auto;
     padding: 2%;
     font-size: 1.2rem;
     * {
@@ -59,11 +59,12 @@
   position: relative;
   width: rem(500px);
   height: rem(200px);
-  padding: 5%;
+  padding: 2%;
   margin: 10% auto;
   display: flex;
   flex-direction: column;
   background: rgba(255, 207, 140, 1);
+  font-size: 1.4rem;
   border-radius: 30px;
   &::after {
     content: '';
