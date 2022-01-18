@@ -1,20 +1,17 @@
 import jwt from 'jsonwebtoken';
 
 const isAuth = (req, res, next) => {
-  try {
-    const { accessToken } = req.cookies;
-    const decoded = jwt.verify(accessToken, process.env.JWT_SECRET_KEY);
-
-    if (decoded) {
-      next();
-    } else {
+  const { accessToken } = req.cookies;
+  jwt.verify(accessToken, process.env.JWT_SECRET_KEY, (error, decoded) => {
+    if (error) {
+      console.error(error);
       res.json({ isLogin: false });
+    } else {
+      console.log('로그인 성공!');
+      req.userId = decoded.userId;
+      next();
     }
-  } catch (error) {
-    console.log(error);
-    console.log('인증 기간이 만료됐습니다.');
-    res.json({ isLogin: false });
-  }
+  });
 };
 
 export default isAuth;

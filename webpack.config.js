@@ -43,7 +43,14 @@ export default {
   devServer: {
     port: 9000,
     compress: true,
-    liveReload: true
+    liveReload: true,
+    historyApiFallback: true,
+    proxy: {
+      '/drawings': 'http://localhost:8000',
+      '/images': 'http://localhost:8000',
+      '/category': 'http://localhost:8000',
+      '/auth': 'http://localhost:8000'
+    }
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -54,7 +61,7 @@ export default {
       filename: 'index.css'
     }),
     new CopyWebPackPlugin({
-      patterns: [{ from: './src/images', to: 'img' }]
+      patterns: [{ from: './src/img', to: 'img' }]
     })
   ],
   mode: 'development'

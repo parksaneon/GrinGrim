@@ -2,7 +2,8 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { findUserById, addNewUser } from '../fakeData/users.js';
 
-const createToken = (userId, expiresIn) => jwt.sign({ userId }, process.env.JWT_SECRET_KEY, { expiresIn });
+const createToken = userId =>
+  jwt.sign({ userId }, process.env.JWT_SECRET_KEY, { expiresIn: process.env.ACCESS_EXPIRE });
 
 const setTokenInCookie = (res, accessToken) => {
   res.cookie('accessToken', accessToken, {
@@ -26,9 +27,8 @@ export const signUp = (req, res) => {
 
   addNewUser({ userId, password: hashedPassword, nickName, userImage });
 
-  const accessToken = createToken(userId, process.env.ACCESS_EXPIRE);
+  const accessToken = createToken(userId);
   setTokenInCookie(res, accessToken);
-  res.cookie('nickName', nickName);
 
   res.status(201).json({ nickName });
 };
@@ -42,10 +42,8 @@ export const signIn = (req, res) => {
   const isValidPassword = bcrypt.compareSync(password, findUser.password);
   if (!isValidPassword) return res.status(401).json({ message: '사용자 정보가 일치하지 않습니다.' });
 
-  const { nickName } = findUserById(userId);
-  const accessToken = createToken(userId, process.env.ACCESS_EXPIRE);
+  const accessToken = createToken(userId);
   setTokenInCookie(res, accessToken);
-  res.cookie('nickName', nickName);
 
   res.status(201).json({ nickName: findUser.nickName });
 };

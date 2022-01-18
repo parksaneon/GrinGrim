@@ -2,12 +2,16 @@ import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
+import path from 'path';
+// import history from 'connect-history-api-fallback';
 import multer from 'multer';
 
 import authRouter from './router/authRouter.js';
 import isAuth from './middleware/auth.js';
 
 dotenv.config();
+
+// const __dirname = path.resolve();
 
 const app = express();
 const port = 8000;
@@ -81,20 +85,27 @@ const categories = [
   }
 ];
 
-app.use('/auth', authRouter);
-app.use('/images', express.static('images'));
-app.use(express.urlencoded({ extended: true }));
 const corsOption = {
-  origin: 'http://localhost:9000', // 접근 권한을 부여하는 도메인
+  origin: 'http://localhost:9000', // 접근 권한을 부여하는 도메인 http://localhost:9000/
   method: ['GET', 'POST', 'DELETE', 'HEAD', 'PUT', 'PATCH'],
   optionsSuccessStatus: 200, // 응답 상태 200으로 설정
   credentials: true // 응답 헤더에 Access-Control-Allow-Credentials 추가
 };
+
 app.use(cors(corsOption));
 app.use(express.static('public'));
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use('/images', express.static('images'));
+app.use('/auth', authRouter);
+
+app.get('/category', (req, res) => {
+  const categoryName = req.query.category;
+  const categoryId = categories.find(category => category.name === categoryName).id;
+
+  res.send(`${categoryId}`);
+});
 
 const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 },
@@ -131,6 +142,20 @@ app.get('/drawings/category/:categoryid', (req, res) => {
   res.send(recentDrawingsWithNickname);
 });
 
+app.get('/drawings', (req, res) => {
+  const { category } = req.query;
+
+  const drawingsFilterByCategory = drawings.filter(drawing => drawing.category === category);
+  const drawingsWithNickname = drawingsFilterByCategory.map(drawing => ({
+    ...drawing,
+    nickname: getNickname(drawing.userid)
+  }));
+  const sortedDrawings = drawingsWithNickname.sort(
+    (drawing1, drawing2) => drawing2.likedUserId.length - drawing1.likedUserId.length
+  );
+  res.send(sortedDrawings);
+});
+
 app.post('/drawings', upload.single('file'), (req, res) => {
   console.log('UPLOAD SUCCESS!', req.file);
   const id = generateId(drawings);
@@ -147,28 +172,33 @@ app.post('/drawings', upload.single('file'), (req, res) => {
   res.send({ id });
 });
 
-app.get('/drawings/:userid', (req, res) => {
+app.get('/category/random', (req, res) => {
+  const randomIndex = Math.floor(Math.random() * categories.length - 0);
+  res.send(categories[randomIndex]);
+});
+
+app.get('/drawings/userid/:userid', (req, res) => {
   const { userid } = req.params;
   const drawingsFilterByUserId = drawings.filter(drawing => drawing.userid === +userid);
-  const drawingsWithNickname = drawingsFilterByUserId.map(drawing => ({
-    ...drawing,
-    nickname: getNickname(drawing.userid)
-  }));
+
+  const nickname = getNickname(userid);
+  const drawingsWithNickname = drawingsFilterByUserId.map(drawing => ({ ...drawing, nickname }));
   res.send(drawingsWithNickname);
 });
 
-app.get('/drawings', (req, res) => {
-  const { category } = req.query;
+app.get('/drawings/category/:categoryid', (req, res) => {
+  const { categoryid } = req.params;
+  const drawingsFilterByCategoryId = drawings.filter(drawing => drawing.categoryid === +categoryid);
+  const drawingsSortedByLiked = drawingsFilterByCategoryId.sort(
+    (drawing1, drawing2) => drawing2.likedUserId.length - drawing1.likedUserId.length
+  );
 
-  const drawingsFilterByCategory = drawings.filter(drawing => drawing.category === category);
-  const drawingsWithNickname = drawingsFilterByCategory.map(drawing => ({
+  const drawingsWithNickname = drawingsSortedByLiked.map(drawing => ({
     ...drawing,
     nickname: getNickname(drawing.userid)
   }));
-  const sortedDrawings = drawingsWithNickname.sort(
-    (drawing1, drawing2) => drawing2.likedUserId.length - drawing1.likedUserId.length
-  );
-  res.send(sortedDrawings);
+
+  res.send(drawingsWithNickname);
 });
 
 app.get('/category/random', (req, res) => {
@@ -177,9 +207,15 @@ app.get('/category/random', (req, res) => {
 });
 
 app.get('/', isAuth, (req, res) => {
+  console.log(req.userId);
   res.json({ isLogin: true });
 });
 
+app.get('/*', (req, res) => {
+  res.sendFile(path.resolve('/', 'index.html'));
+});
+
+// port 생성 서버 실행
 app.listen(port, () => {
-  console.log('server listening');
+  console.log('Server running ....');
 });
