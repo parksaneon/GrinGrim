@@ -48,6 +48,9 @@ let drawings = [
 ];
 
 const getDrawings = () => drawings;
+const toggleUserId = (likedUserId, userId) =>
+  likedUserId.includes(userId) ? likedUserId.filter(id => id !== +userId) : [...likedUserId, +userId];
+
 export const generateDrawingId = () => (drawings[drawings.length - 1]?.id || 0) + 1;
 export const findDrawingsById = userId => drawings.filter(drawing => drawing.userId === +userId);
 export const findDrawingsByDrawId = (drawingid, drawings = getDrawings()) =>
@@ -75,9 +78,6 @@ export const drawingsSortedByDate = drawings => drawings.sort((drawing1, drawing
 export const addNewDrawing = newDrawing => {
   drawings = [...drawings, newDrawing];
 };
-
-const toggleUserId = (likedUserId, userId) =>
-  likedUserId.includes(userId) ? likedUserId.filter(id => id !== +userId) : [...likedUserId, +userId];
 
 export const setDrawingLikedById = (id, userId) => {
   drawings = drawings.map(drawing =>
