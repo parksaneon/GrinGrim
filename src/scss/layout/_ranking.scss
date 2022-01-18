@@ -1,0 +1,57 @@
+@use '../utils/' as *;
+@use '../base/' as *;
+
+.ranking-container {
+  position: relative;
+  background: rgba(254, 235, 182, 1) url('/src/img/dog.png') no-repeat;
+  background-position: bottom;
+  background-size: 20%;
+  border-radius: rem(30px);
+  width: 80vw;
+  height: 80vh;
+  min-width: calc(990px + 4%);
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: rem(50px);
+  padding: 2%;
+  padding-bottom: 0;
+
+  figure:nth-child(2) {
+    order: -1;
+  }
+  figure:nth-child(1) {
+    transform: translateY(-10%);
+  }
+
+  .drawings {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
+  }
+  .category-title {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    margin: rem(100px) 0;
+  }
+  .img-container {
+    border: 15px solid rgba(255, 207, 140, 1);
+    border-radius: 10px;
+    margin-bottom: rem(15px);
+  }
+  img {
+    width: rem(300px);
+    height: rem(300px);
+    background-color: #fff;
+  }
+
+  figcaption {
+    display: flex;
+    background: #fff;
+    width: 50%;
+    margin: 0 auto;
+    padding: 2%;
+    font-size: 1.2rem;
+  }
+}
