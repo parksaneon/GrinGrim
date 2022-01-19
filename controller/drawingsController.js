@@ -29,6 +29,7 @@ export const sendDrawingsByCategoryId = (req, res) => {
   const { categoryid } = req.params;
   const { drawingId, sortBy } = req.query;
   const drawingsFilterByDrawingId = findDrawingsByDrawId(drawingId, findDrawingsByCategory(categoryid));
+
   // drawing.id !== +drawingId
   const drawingsSortedBy =
     sortBy === 'date'

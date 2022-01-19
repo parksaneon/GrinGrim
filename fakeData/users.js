@@ -12,8 +12,8 @@ let users = [
 ];
 
 export const getUsers = () => users;
-export const findUserById = userId => users.find(user => user.userId === userId);
-export const getNickname = userId => findUserById(userId).nickName;
+export const findUserById = id => users.find(user => user.id === +id);
+export const getNickname = id => findUserById(id).nickName;
 export const addNewUser = newUser => {
   users = [newUser, ...users];
 };
