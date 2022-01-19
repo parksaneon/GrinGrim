@@ -1,6 +1,6 @@
 import {
   addNewDrawing,
-  newDrawingsWithDNickName,
+  newDrawingsWithUserInfo,
   findDrawingsByCategory,
   findDrawingById,
   setDrawingLikedById,
@@ -14,7 +14,7 @@ import {
 
 export const sendDrawingsByCategory = (req, res) => {
   const { category } = req.query;
-  res.send(drawingsSortedByLiked(newDrawingsWithDNickName(findDrawingsByCategory(category))));
+  res.send(drawingsSortedByLiked(newDrawingsWithUserInfo(findDrawingsByCategory(category))));
 };
 
 export const sendDrawingsByDrwaingId = (req, res) => {
@@ -31,14 +31,11 @@ export const sendDrawingsByCategoryId = (req, res) => {
   const { categoryid } = req.params;
   const { drawingId, sortBy } = req.query;
   const drawingsFilterByDrawingId = findDrawingsByDiffDrawId(drawingId, findDrawingsByCategory(categoryid));
-
-  // drawing.id !== +drawingId
   const drawingsSortedBy =
     sortBy === 'date'
       ? drawingsSortedByDate(drawingsFilterByDrawingId)
       : drawingsSortedByLiked(drawingsFilterByDrawingId);
-
-  res.send(newDrawingsWithDNickName(drawingsSortedBy));
+  res.send(newDrawingsWithUserInfo(drawingsSortedBy));
 };
 
 export const addDrawing = (req, res) => {
