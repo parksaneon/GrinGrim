@@ -7,7 +7,6 @@ import NotFound from './pages/NotFound.js';
 
 const routes = [
   { path: '/', component: Home },
-  // { path: '/@:userid', component: Home, gaurd: isAuth, fallback: '/signin' },
   { path: '/mydrawings', component: Mydrawings },
   { path: '/ranking', component: Ranking },
   { path: '/draw', component: Draw },
@@ -21,8 +20,13 @@ const getComponent = path =>
 const render = async (el, path, query) => {
   const page = getComponent(path);
   const { data } = await page.getData(query);
+  console.log(data);
   el.innerHTML = page.getHtml(data);
   page.eventBinding(el);
+
+  if (path === '/') {
+    page.renderLogin(data.isLogin);
+  }
 };
 
 export default render;
