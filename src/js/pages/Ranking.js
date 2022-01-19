@@ -17,18 +17,20 @@ export default () => ({
 				<div class="drawings">` +
       ranking
         .map(
-          ({ id, likedUserId, url, nickname }) => `
+          ({ id, likedUserId, url, nickname, profile }) => `
 					<figure data-id="${id}">
 					<div class="img-container">
 						<img src="${url}">
 					</div>
 					<figcaption>
-					
-          <div class="like--group">
-          <i class="${likedUserId.includes(USER_ID) ? 'fas fa-heart' : 'far fa-heart'} like"></i>
-            <span>${likedUserId.length}</span>
-          </div>
-					<span class="nickname">${nickname}</span>
+					<img src="${profile}" class="profile"/>
+					<div class="info-container">
+						<span class="nickname">${nickname}</span>
+						<div class="like--group">
+						<i class="${likedUserId.includes(USER_ID) ? 'fas fa-heart' : 'far fa-heart'} like"></i>
+							<span>${likedUserId.length}</span>
+						</div>
+					</div>
 					</figcaption>
 					</figure>
           `

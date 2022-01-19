@@ -1,4 +1,4 @@
-import { getNickname } from './users.js';
+import { getNickname, getProfile } from './users.js';
 
 let drawings = [
   {
@@ -71,10 +71,11 @@ export const newDrawingsWithUNickName = (drawings, nickName) =>
     nickname: nickName
   }));
 
-export const newDrawingsWithDNickName = drawings =>
+export const newDrawingsWithUserInfo = drawings =>
   drawings.map(drawing => ({
     ...drawing,
-    nickname: getNickname(drawing.userId)
+    nickname: getNickname(drawing.userId),
+    profile: getProfile(drawing.userId)
   }));
 
 export const drawingsSortedByLiked = drawings =>

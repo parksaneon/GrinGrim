@@ -36,7 +36,6 @@ export const signUp = (req, res) => {
   const { userId, password, nickName } = req.body;
   const { path: userImage } = req.file;
   const hashedPassword = bcrypt.hashSync(password, 10);
-
   addNewUser({ userId, password: hashedPassword, nickName, userImage });
 
   const accessToken = createToken(userId);
