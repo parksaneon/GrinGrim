@@ -9,7 +9,7 @@ const isAuth = (req, res, next) => {
       res.json({ isLogin: false });
     } else {
       console.log('로그인 성공!');
-      req.userId = decoded.userId;
+      req.id = decoded.id;
       next();
     }
   });

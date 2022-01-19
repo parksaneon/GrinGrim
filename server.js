@@ -34,6 +34,7 @@ app.use('/category', categoryRouter);
 app.use('/drawings', drawingsRouter);
 
 app.use('/', isAuth, (req, res) => {
+  console.log(1);
   res.json({ isLogin: true });
 });
 
