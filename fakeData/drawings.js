@@ -69,10 +69,14 @@ export const newDrawingsWithUNickName = (drawings, nickName) =>
   }));
 
 export const newDrawingsWithDNickName = drawings =>
-  drawings.map(drawing => ({
-    ...drawing,
-    nickname: getNickname(drawing.userId)
-  }));
+  drawings.map(drawing => {
+    console.log(drawing.userId);
+    console.log(getNickname(drawing.userId));
+    return {
+      ...drawing,
+      nickname: getNickname(drawing.userId)
+    };
+  });
 
 export const drawingsSortedByLiked = drawings =>
   drawings.sort((drawing1, drawing2) => drawing2.likedUserId.length - drawing1.likedUserId.length);
