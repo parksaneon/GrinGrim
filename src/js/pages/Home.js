@@ -29,6 +29,7 @@ export default () => ({
   },
 
   loginView: `
+    <button class="btn--logOut">로그아웃</button>
     <a href="/mydrawings">
       <i class="fas fa-solid fa-images"></i>
       내 그림
@@ -219,19 +220,29 @@ export default () => ({
       });
     };
 
+    const logOut = async () => {
+      const {
+        data: { isLogin }
+      } = await axios.post(`http://localhost:8000/auth/logOut`, null, {
+        withCredentials: true
+      });
+      this.renderLogin(isLogin);
+    };
+
     $body.addEventListener('click', ({ target }) => {
       if (target.matches('.open--modal')) toggleModal();
     });
 
     $main.addEventListener('click', e => {
       e.preventDefault();
-      if (!e.target.matches('.open--signForm')) return;
-      if (!doingNow) toggleModal();
+
+      if (e.target.classList.contains('btn--logOut')) logOut();
+      else if (e.target.matches('.open--signForm') && !doingNow) toggleModal();
 
       if (e.target.classList.contains('signIn--open')) {
         doingNow = 'signIn';
         renderSignIn();
-      } else {
+      } else if (e.target.classList.contains('signUp--open')) {
         doingNow = 'signUp';
         renderSignUp();
       }

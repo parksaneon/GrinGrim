@@ -37,11 +37,6 @@ app.use('/', isAuth, (req, res) => {
   res.json({ isLogin: true });
 });
 
-// app.get('/', isAuth, (req, res) => {
-//   console.log(req.userId);
-//   res.json({ isLogin: true });
-// });
-
 // port 생성 서버 실행
 app.listen(port, () => {
   console.log('Server running ....');
