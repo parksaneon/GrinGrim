@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack",
+    "build": "webpack --watch",
     "server": "webpack serve  --open",
     "dev": "nodemon server.js",
     "start": "run-p server dev"
@@ -43,7 +43,6 @@
   "dependencies": {
     "axios": "^0.24.0",
     "bcrypt": "^5.0.1",
-    "connect-history-api-fallback": "^1.6.0",
     "cookie-parser": "^1.4.6",
     "copy-webpack-plugin": "^10.2.0",
     "cors": "^2.8.5",

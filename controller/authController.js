@@ -11,17 +11,17 @@ const setTokenInCookie = (res, accessToken) => {
   });
 };
 
-export function auth(req, res) {
+export const auth = (req, res) => {
   const { accessToken } = req.cookies;
 
   jwt.verify(accessToken, process.env.JWT_SECRET_KEY, (error, decoded) => {
     if (error) {
-      res.status(401).json({ USER_ID: null });
+      res.status(401).json({ userId: null });
     } else {
-      res.status(401).json({ USER_ID: decoded.id });
+      res.status(201).json({ userId: decoded.id });
     }
   });
-}
+};
 
 export const checkId = (req, res) => {
   const { tempId } = req.body;

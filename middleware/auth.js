@@ -9,8 +9,9 @@ const isAuth = (req, res, next) => {
       res.json({ isLogin: false });
     } else {
       console.log('로그인 성공!');
-      req.id = decoded.id;
-      next();
+      res.json({ isLogin: true });
+      // req.id = decoded.id;
+      // next();
     }
   });
 };

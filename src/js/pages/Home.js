@@ -2,31 +2,36 @@ import axios from 'axios';
 
 export default () => ({
   async getData() {
-    const res = await axios.get('http://localhost:8000/', {
-      withCredentials: true
-    });
-    console.log(res);
-    return res;
+    try {
+      const res = await axios.get('http://localhost:8000/auth/isAuth', {
+        withCredentials: true
+      });
+      return res;
+    } catch (error) {
+      return error.response;
+    }
   },
 
-  getHtml() {
+  getHtml({ userId }) {
     return `
-        <h1 class="logo">
-          <img src="img/title.svg" alt="" />
-        </h1>
-        <main class="main">
-          <div class="top--section">
-            <div class="left--section">
-              <img src="img/art1.svg" alt="" />
+          <h1 class="logo">
+            <img src="img/title.svg" alt="" />
+          </h1>
+          <main class="main">
+            <div class="top--section">
+              <div class="left--section">
+                <img src="img/art1.svg" alt="" />
+              </div>
+              <div class="right--section">
+                <img src="img/art2.svg" alt="" />
+              </div>
             </div>
-            <div class="right--section">
-              <img src="img/art2.svg" alt="" />
+            <div class="bottom--section">
+              ${userId ? this.loginView : this.notLoginView}
             </div>
-          </div>
-          <div class="bottom--section"></div>
-        </main>
-        <div class="form--wrap"></div>
-      `;
+          </main>
+          <div class="form--wrap"></div>
+        `;
   },
 
   loginView: `
@@ -50,8 +55,8 @@ export default () => ({
     <button class="open--signForm signUp--open">회원가입</button>
   `,
 
-  renderLogin(isLogin) {
-    document.querySelector('.bottom--section').innerHTML = isLogin ? this.loginView : this.notLoginView;
+  renderLogin(userId) {
+    document.querySelector('.bottom--section').innerHTML = userId ? this.loginView : this.notLoginView;
   },
 
   eventBinding() {
@@ -223,11 +228,11 @@ export default () => ({
 
     const logOut = async () => {
       const {
-        data: { isLogin }
+        data: { userId }
       } = await axios.post('/auth/logOut', null, {
         withCredentials: true
       });
-      this.renderLogin(isLogin);
+      this.renderLogin(userId);
     };
 
     $body.addEventListener('click', ({ target }) => {

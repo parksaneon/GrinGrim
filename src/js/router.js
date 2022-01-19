@@ -20,11 +20,8 @@ const getComponent = path =>
 const render = async (el, path, query) => {
   const page = getComponent(path);
   const { data } = await page.getData(query);
-  el.innerHTML = page.getHtml(data);
+  el.innerHTML = await page.getHtml(data);
   page.eventBinding(el);
-  if (path === '/') {
-    page.renderLogin(data.isLogin);
-  }
 };
 
 export default render;
