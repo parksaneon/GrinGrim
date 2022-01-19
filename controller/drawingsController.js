@@ -47,7 +47,7 @@ export const addDrawing = (req, res) => {
   const { userId, categoryId } = req.body;
   const newDrawing = {
     id,
-    userId,
+    userId: +userId,
     url: req.file.destination + req.file.originalname,
     categoryId,
     likedUserId: []

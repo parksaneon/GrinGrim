@@ -34,7 +34,6 @@ app.use('/category', categoryRouter);
 app.use('/drawings', drawingsRouter);
 
 app.use('/', isAuth, (req, res) => {
-  console.log('요청 옴');
   res.json({ isLogin: true });
 });
 

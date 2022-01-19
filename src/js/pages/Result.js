@@ -10,7 +10,6 @@ export default () => ({
     const { data: recentDrawingsWithNickname } = await axios.get(
       `/drawings/category/${categoryId}?sortBy=date&drawingId!=${drawingId}`
     );
-    console.log(myDrawing);
     return { data: { myDrawing, recentDrawingsWithNickname } };
   },
 
