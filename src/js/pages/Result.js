@@ -7,13 +7,13 @@ export default () => ({
     const categoryId = category.split('=')[1];
 
     const { data: myDrawing } = await axios.get(`/drawings/${drawingId}`);
-    const { data: recentDrawingsWithNickname } = await axios.get(
+    const { data: recentDrawingsWithUserInfo } = await axios.get(
       `/drawings/category/${categoryId}?sortBy=date&drawingId!=${drawingId}`
     );
-    return { data: { myDrawing, recentDrawingsWithNickname } };
+    return { data: { myDrawing, recentDrawingsWithUserInfo } };
   },
 
-  getHtml({ myDrawing, recentDrawingsWithNickname }) {
+  getHtml({ myDrawing, recentDrawingsWithUserInfo }) {
     const USER_ID = 1;
     return (
       [myDrawing]
@@ -30,19 +30,24 @@ export default () => ({
     						`
         )
         .join('') +
-      recentDrawingsWithNickname
+      recentDrawingsWithUserInfo
         .map(
           drawing =>
             `
     					<figure data-id="${drawing.id}">
-    					<img src="${drawing.url}" alt="다른 유저 그림" />
-    					<figcaption>
-              <div class="like--group">
-                <i class="${drawing.likedUserId.includes(USER_ID) ? 'fas fa-heart' : 'far fa-heart'} like"></i>
-                <span>${drawing.likedUserId.length}</span>
-              </div>
-    					<span class="nickname">${drawing.nickname}</span>
-    					</figcaption>
+							<div class="img-container">
+    						<img src="${drawing.url}" alt="다른 유저 그림" />
+							</div>
+							<figcaption>
+								<img src="${drawing.profile}" class="profile"/>
+								<div class="info-container">
+									<span class="nickname">${drawing.nickname}</span>
+									<div class="like--group">
+									<i class="${drawing.likedUserId.includes(USER_ID) ? 'fas fa-heart' : 'far fa-heart'} like"></i>
+										<span>${drawing.likedUserId.length}</span>
+									</div>
+								</div>
+							</figcaption>
     				</figure>
     				`
         )
