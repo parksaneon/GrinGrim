@@ -205,11 +205,6 @@ app.get('/drawings/userid/:userid', (req, res) => {
 
 app.get('/category/:id/name', (req, res) => {
   const { id } = req.params;
-
-  const drawingsWithNickname = drawingsSortedByLiked.map(drawing => ({
-    ...drawing,
-    nickname: getNickname(drawing.userId)
-  }));
   const { name } = categories.find(category => category.id === +id);
 
   res.send(`${name}`);
