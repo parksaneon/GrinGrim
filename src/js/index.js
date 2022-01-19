@@ -7,7 +7,8 @@ import render from './router.js';
 const $root = document.getElementById('root');
 
 window.addEventListener('popstate', e => {
-  render($root, e.state ? e.state.path : '/');
+  render($root, window.location.pathname, window.location.search.substring(1));
+  // render($root, e.state ? e.state.path : '/');
 });
 
 document.addEventListener('DOMContentLoaded', () => {
