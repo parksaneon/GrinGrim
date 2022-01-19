@@ -5,6 +5,7 @@ import {
   findDrawingById,
   setDrawingLikedById,
   findDrawingsByDrawId,
+  findDrawingsByDiffDrawId,
   drawingsSortedByDate,
   drawingsSortedByLiked,
   generateDrawingId,
@@ -18,7 +19,6 @@ export const sendDrawingsByCategory = (req, res) => {
 
 export const sendDrawingsByDrwaingId = (req, res) => {
   const { drawingid } = req.params;
-  console.log(findDrawingByDrawId(drawingid));
   res.send(findDrawingByDrawId(drawingid));
 };
 
@@ -30,8 +30,8 @@ export const sendDrawingsByUserId = (req, res) => {
 export const sendDrawingsByCategoryId = (req, res) => {
   const { categoryid } = req.params;
   const { drawingId, sortBy } = req.query;
-  const drawingsFilterByDrawingId = findDrawingsByDrawId(drawingId, findDrawingsByCategory(categoryid));
-  console.log('요청 옴');
+  const drawingsFilterByDrawingId = findDrawingsByDiffDrawId(drawingId, findDrawingsByCategory(categoryid));
+
   // drawing.id !== +drawingId
   const drawingsSortedBy =
     sortBy === 'date'
