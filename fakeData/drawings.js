@@ -54,8 +54,10 @@ const toggleUserId = (likedUserId, userId) =>
 export const generateDrawingId = () => (drawings[drawings.length - 1]?.id || 0) + 1;
 export const findDrawingsById = userId => drawings.filter(drawing => drawing.userId === +userId);
 export const findDrawingsByDrawId = (drawingid, drawings = getDrawings()) =>
-  drawings.filter(drawing => drawing.id !== +drawingid);
-export const findDrawingById = userId => drawings.find(drawing => drawing.userId === +userId);
+  drawings.filter(drawing => drawing.userId !== +drawingid);
+export const findDrawingByDrawId = (drawingid, drawings = getDrawings()) =>
+  drawings.find(drawing => drawing.id === +drawingid);
+export const findDrawingById = id => drawings.find(drawing => drawing.id === +id);
 export const findDrawingsByCategory = categoryId => drawings.filter(drawing => drawing.categoryId === +categoryId);
 
 export const newDrawingsWithUNickName = (drawings, nickName) =>

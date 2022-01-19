@@ -6,7 +6,6 @@ export default () => ({
     const categoryId = query.split('=')[1];
     const { data: categoryName } = await axios.get(`category/${categoryId}/name`);
     const { data: ranking } = await axios.get(`drawings/category/${categoryId}?sortBy=like`);
-    console.log(categoryName, ranking);
     return { data: { categoryName, ranking } };
   },
 

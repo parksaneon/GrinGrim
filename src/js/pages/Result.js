@@ -10,13 +10,14 @@ export default () => ({
     const { data: recentDrawingsWithNickname } = await axios.get(
       `/drawings/category/${categoryId}?sortBy=date&drawingId!=${drawingId}`
     );
+    console.log(myDrawing);
     return { data: { myDrawing, recentDrawingsWithNickname } };
   },
 
   getHtml({ myDrawing, recentDrawingsWithNickname }) {
     const USER_ID = 1;
     return (
-      myDrawing
+      [myDrawing]
         .map(
           ({ url }) =>
             `
