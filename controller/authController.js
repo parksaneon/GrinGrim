@@ -1,9 +1,8 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import { addNewUser, findUserByUserId } from '../fakeData/users.js';
+import { addNewUser, findUserByUserId, generateUserId } from '../fakeData/users.js';
 
-const createToken = userId =>
-  jwt.sign({ userId }, process.env.JWT_SECRET_KEY, { expiresIn: process.env.ACCESS_EXPIRE });
+const createToken = id => jwt.sign({ id: +id }, process.env.JWT_SECRET_KEY, { expiresIn: process.env.ACCESS_EXPIRE });
 
 const setTokenInCookie = (res, accessToken) => {
   res.cookie('accessToken', accessToken, {
@@ -19,7 +18,7 @@ export function auth(req, res) {
     if (error) {
       res.status(401).json({ USER_ID: null });
     } else {
-      res.status(401).json({ USER_ID: decoded.userId });
+      res.status(401).json({ USER_ID: decoded.id });
     }
   });
 }
@@ -35,8 +34,10 @@ export const checkId = (req, res) => {
 export const signUp = (req, res) => {
   const { userId, password, nickName } = req.body;
   const { path: userImage } = req.file;
+  const id = generateUserId();
   const hashedPassword = bcrypt.hashSync(password, 10);
-  addNewUser({ userId, password: hashedPassword, nickName, userImage });
+
+  addNewUser({ id, userId, password: hashedPassword, nickName, userImage });
 
   const accessToken = createToken(userId);
   setTokenInCookie(res, accessToken);
@@ -53,7 +54,7 @@ export const signIn = (req, res) => {
   const isValidPassword = bcrypt.compareSync(password, findUser.password);
   if (!isValidPassword) return res.status(401).json({ message: '사용자 정보가 일치하지 않습니다.' });
 
-  const accessToken = createToken(userId);
+  const accessToken = createToken(findUser.id);
   setTokenInCookie(res, accessToken);
 
   res.status(201).json({ nickName: findUser.nickName });

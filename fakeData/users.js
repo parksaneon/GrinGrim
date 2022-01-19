@@ -15,6 +15,7 @@ let users = [
 
 const findUserById = id => users.find(user => user.id === +id);
 
+export const generateUserId = () => (users[users.length - 1]?.id || 0) + 1;
 export const getUsers = () => users;
 export const findUserByUserId = userId => users.find(user => user.userId === userId);
 export const getNickname = id => findUserById(id).nickName;
