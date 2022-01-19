@@ -46,6 +46,7 @@ export default {
     liveReload: true,
     historyApiFallback: true,
     proxy: {
+      '/': 'http://localhost:8000',
       '/drawings': 'http://localhost:8000',
       '/images': 'http://localhost:8000',
       '/category': 'http://localhost:8000',

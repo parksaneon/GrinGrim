@@ -5,6 +5,7 @@ export default () => ({
     const res = await axios.get('http://localhost:8000/', {
       withCredentials: true
     });
+    console.log(res);
     return res;
   },
 
@@ -121,7 +122,7 @@ export default () => ({
     };
 
     const sendUserReq = async formData => {
-      const res = await axios.post(`http://localhost:8000/auth/${doingNow}`, formData, {
+      const res = await axios.post(`/auth/${doingNow}`, formData, {
         withCredentials: true
       });
       return res;
@@ -223,7 +224,7 @@ export default () => ({
     const logOut = async () => {
       const {
         data: { isLogin }
-      } = await axios.post(`http://localhost:8000/auth/logOut`, null, {
+      } = await axios.post('/auth/logOut', null, {
         withCredentials: true
       });
       this.renderLogin(isLogin);
