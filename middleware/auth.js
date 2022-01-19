@@ -2,9 +2,10 @@ import jwt from 'jsonwebtoken';
 
 const isAuth = (req, res, next) => {
   const { accessToken } = req.cookies;
+
   jwt.verify(accessToken, process.env.JWT_SECRET_KEY, (error, decoded) => {
     if (error) {
-      console.error(error);
+      console.log('토큰 없음');
       res.json({ isLogin: false });
     } else {
       console.log('로그인 성공!');
