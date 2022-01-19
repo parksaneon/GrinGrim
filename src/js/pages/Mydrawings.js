@@ -33,8 +33,10 @@ export default () => ({
 					</div>
 					<figcaption>
 					<p>주제: ${categoryName}</p>
-					<i class="fas fa-heart like"></i>
-					<span>${likedUserId.length}</span>
+					<div class="like-group">
+						<i class="fas fa-heart like"></i>
+						<span>${likedUserId.length}</span>
+					</div>
 					</figcaption>
 					</figure>
 			`
