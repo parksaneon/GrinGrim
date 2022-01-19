@@ -12,6 +12,18 @@ const setTokenInCookie = (res, accessToken) => {
   });
 };
 
+export function auth(req, res) {
+  const { accessToken } = req.cookies;
+
+  jwt.verify(accessToken, process.env.JWT_SECRET_KEY, (error, decoded) => {
+    if (error) {
+      res.status(401).json({ USER_ID: null });
+    } else {
+      res.status(401).json({ USER_ID: decoded.userId });
+    }
+  });
+}
+
 export const checkId = (req, res) => {
   const { tempId } = req.body;
   const foundedUser = findUserByUserId(tempId);
@@ -47,3 +59,8 @@ export const signIn = (req, res) => {
 
   res.status(201).json({ nickName: findUser.nickName });
 };
+
+export function logout(req, res) {
+  res.clearCookie('accessToken');
+  res.status(200).json({ isLogin: false });
+}
