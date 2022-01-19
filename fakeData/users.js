@@ -7,7 +7,7 @@ let users = [
   },
   {
     id: 2,
-    nickname: '최한나'
+    nickName: '최한나'
   }
 ];
 

@@ -37,6 +37,7 @@ export const sendDrawingsByCategoryId = (req, res) => {
     sortBy === 'date'
       ? drawingsSortedByDate(drawingsFilterByDrawingId)
       : drawingsSortedByLiked(drawingsFilterByDrawingId);
+  console.log(newDrawingsWithDNickName(drawingsSortedBy));
   res.send(newDrawingsWithDNickName(drawingsSortedBy));
 };
 

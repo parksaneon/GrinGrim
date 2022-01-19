@@ -5,10 +5,8 @@ export default () => ({
     const USER_ID = 1;
     const { data: mydrawings } = await axios.get(`/drawings/userid/${USER_ID}`);
     const categoryNamePromise = mydrawings.map(({ categoryId }) => axios.get(`/category/${categoryId}/name`));
-    console.log(mydrawings);
     const categoryNames = await Promise.all(categoryNamePromise);
 
-    console.log(categoryNames);
     let mydrawingsWithCategoryName = [];
 
     mydrawings.forEach((mydrawing, index) => {
