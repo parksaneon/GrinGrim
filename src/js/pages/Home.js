@@ -1,39 +1,71 @@
 import axios from 'axios';
 
 export default () => ({
-  getData() {
-    return { data: null };
+  async getData() {
+    const res = await axios.get('http://localhost:8000/', {
+      withCredentials: true
+    });
+    return res;
   },
 
   getHtml() {
     return `
-    <div class="wrap">
-      <h1 class="logo">
-        <img src="./img/title.svg" alt=""/>
-      </h1>
-      <main class="main">
-        <div class="left--section">
-          <img src="./img/art1.svg" alt="" /><button class="open--signForm signIn--open">로그인</button>
-        </div>
-        <div class="right--section">
-          <img src="img/art2.svg" alt="" /><button class="open--signForm signUp--open">회원가입</button>
-        </div>
-      </main>
-      <div class="form--wrap"></div>
-    </div>
+        <h1 class="logo">
+          <img src="img/title.svg" alt="" />
+        </h1>
+        <main class="main">
+          <div class="top--section">
+            <div class="left--section">
+              <img src="img/art1.svg" alt="" />
+            </div>
+            <div class="right--section">
+              <img src="img/art2.svg" alt="" />
+            </div>
+          </div>
+          <div class="bottom--section"></div>
+        </main>
+        <div class="form--wrap"></div>
       `;
   },
 
-  eventBinding(el) {
+  loginView: `
+    <a href="/mydrawings">
+      <i class="fas fa-solid fa-images"></i>
+      내 그림
+    </a>
+    <a href="/ranking">
+      <i class="fas fa-solid fa-trophy"></i>
+      랭킹
+    </a>
+    <a href="/draw">
+      <i class="fas fa-paint-brush"></i>
+      그림 그리기
+    </a>
+  `,
+
+  notLoginView: `
+    <button class="open--signForm signIn--open">로그인</button>
+    <button class="open--signForm signUp--open">회원가입</button>
+  `,
+
+  renderLogin(isLogin) {
+    document.querySelector('.bottom--section').innerHTML = isLogin ? this.loginView : this.notLoginView;
+  },
+
+  eventBinding() {
     const $body = document.querySelector('body');
     const $main = document.querySelector('.main');
-    // const $buttonWrap = document.querySelector('.bottom--section');
+    const $buttonWrap = document.querySelector('.bottom--section');
     const $formWrap = document.querySelector('.form--wrap');
     let doingNow = null;
 
     const userSignUp = {
       isValidId: false,
-      isValidIdPwd: false
+      isValidPwd: false
+    };
+
+    const renderLogin = () => {
+      $buttonWrap.innerHTML = this.loginView;
     };
 
     const toggleModal = () => {
@@ -44,51 +76,51 @@ export default () => ({
 
     const renderSignIn = () => {
       $formWrap.innerHTML = `
-        <button class="close--modal">닫기</button>
-        <form method="post" class="signInForm" >
-          <div>
-            <label for="userId">아이디</label>
-            <input type="text" id="userId" name="userId" placeholder="아이디" required />
-          </div>
-          <div>
-            <label for="password">비밀번호</label>
-            <input type="password" id="password" name="password" placeholder="비밀번호" required />
-          </div>
-          <button type="submit">로그인</button>
-        </form>
-      `;
+          <button class="close--modal">닫기</button>
+          <form method="post" class="signInForm" >
+            <div>
+              <label for="userId">아이디</label>
+              <input type="text" id="userId" name="userId" placeholder="아이디" required />
+            </div>
+            <div>
+              <label for="password">비밀번호</label>
+              <input type="password" id="password" name="password" placeholder="비밀번호" required />
+            </div>
+            <button type="submit">로그인</button>
+          </form>
+        `;
     };
 
     const renderSignUp = () => {
       $formWrap.innerHTML = `
-        <button class="close--modal">닫기</button>
-        <form method="post" class="signUpForm" enctype="multipart/form-data">
-          <div>
-            <label for="userId">아이디</label>
-            <input type="text" id="userId" name="userId" placeholder="아이디" required autocomplete="on"/>
-            <span class="id--informText"></span>
-          </div>
-          <div>
-            <label for="password">비밀번호</label>
-            <input type="password" id="password" name="password" placeholder="비밀번호" required autocomplete="on"/>
-            <span class="pwd--informText"></span>
-          </div>
-          <div>
-            <label for="nickName">닉네임</label>
-            <input type="text" id="nickName" name="nickName" placeholder="닉네임" required autocomplete="on"/>
-          </div>
-          <div class="upload-box">
-          <label for="userImage">이곳을 클릭하거나 이미지를 드래그 하세요</label>
-            <input type="file" id="userImage" name="userImage" required value=""/>
-            <img src="" alt="" class="showImage"/>
-          </div>
-          <button type="submit">회원가입</button>
-        </form>
-      `;
+          <button class="close--modal">닫기</button>
+          <form method="post" class="signUpForm" enctype="multipart/form-data">
+            <div>
+              <label for="userId">아이디</label>
+              <input type="text" id="userId" name="userId" placeholder="아이디" required autocomplete="on"/>
+              <span class="id--informText"></span>
+            </div>
+            <div>
+              <label for="password">비밀번호</label>
+              <input type="password" id="password" name="password" placeholder="비밀번호" required autocomplete="on"/>
+              <span class="pwd--informText"></span>
+            </div>
+            <div>
+              <label for="nickName">닉네임</label>
+              <input type="text" id="nickName" name="nickName" placeholder="닉네임" required autocomplete="on"/>
+            </div>
+            <div class="upload-box">
+            <label for="userImage">이곳을 클릭하거나 이미지를 드래그 하세요</label>
+              <input type="file" id="userImage" name="userImage" required value=""/>
+              <img src="" alt="" class="showImage"/>
+            </div>
+            <button type="submit">회원가입</button>
+          </form>
+        `;
     };
 
     const sendUserReq = async formData => {
-      const res = await axios.post(`/auth/${doingNow}`, formData, {
+      const res = await axios.post(`http://localhost:8000/auth/${doingNow}`, formData, {
         withCredentials: true
       });
       return res;

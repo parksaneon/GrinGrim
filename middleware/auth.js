@@ -1,19 +1,18 @@
 import jwt from 'jsonwebtoken';
 
 const isAuth = (req, res, next) => {
-  try {
-    const { accessToken } = req.cookies;
-    const decoded = jwt.verify(accessToken, process.env.JWT_SECRET_KEY);
+  const { accessToken } = req.cookies;
 
-    if (decoded) {
-      next();
-    } else {
+  jwt.verify(accessToken, process.env.JWT_SECRET_KEY, (error, decoded) => {
+    if (error) {
+      console.log('토큰 없음');
       res.json({ isLogin: false });
+    } else {
+      console.log('로그인 성공!');
+      req.userId = decoded.userId;
+      next();
     }
-  } catch (error) {
-    console.log(error);
-    res.json({ isLogin: false });
-  }
+  });
 };
 
 export default isAuth;

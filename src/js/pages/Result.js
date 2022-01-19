@@ -16,7 +16,7 @@ export default () => ({
   getHtml({ myDrawing, recentDrawingsWithNickname }) {
     const USER_ID = 1;
     return (
-      myDrawing
+      [myDrawing]
         .map(
           ({ url }) =>
             `

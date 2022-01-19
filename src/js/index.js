@@ -1,6 +1,5 @@
 import '../index.html';
 import '../scss/style.scss';
-// import user from './user.js';
 
 import render from './router.js';
 
