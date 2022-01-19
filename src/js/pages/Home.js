@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export default () => ({
   async getData() {
-    const res = await axios.get('http://localhost:8000', {
+    const res = await axios.get('http://localhost:8000/', {
       withCredentials: true
     });
     return res;
@@ -120,7 +120,7 @@ export default () => ({
     };
 
     const sendUserReq = async formData => {
-      const res = await axios.post(`/auth/${doingNow}`, formData, {
+      const res = await axios.post(`http://localhost:8000/auth/${doingNow}`, formData, {
         withCredentials: true
       });
       return res;

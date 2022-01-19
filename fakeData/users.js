@@ -11,8 +11,10 @@ let users = [
   }
 ];
 
+const findUserById = id => users.find(user => user.id === +id);
+
 export const getUsers = () => users;
-export const findUserById = id => users.find(user => user.id === +id);
+export const findUserByUserId = userId => users.find(user => user.userId === userId);
 export const getNickname = id => findUserById(id).nickName;
 export const addNewUser = newUser => {
   users = [newUser, ...users];
