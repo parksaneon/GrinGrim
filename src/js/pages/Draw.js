@@ -33,12 +33,9 @@ export default () => ({
     const ctx = $canvas.getContext('2d');
 
     const convertToBlob = base64 => {
-      const decodImg = atob(base64.split(',')[1]);
-      const array = [];
-      for (let i = 0; i < decodImg.length; i++) {
-        array.push(decodImg.charCodeAt(i));
-      }
-      return new Blob([new Uint8Array(array)], {
+      const decodeImg = atob(base64.split(',')[1]);
+      const arr = decodeImg.split('').map(char => char.charCodeAt(0));
+      return new Blob([new Uint8Array(arr)], {
         type: 'image/png'
       });
     };
@@ -46,7 +43,7 @@ export default () => ({
     const uploadDrawing = () => {
       const image = $canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream');
       const file = convertToBlob(image);
-      const fileName = 'canvas' + new Date().getTime() + '.png';
+      const fileName = `canvas${new Date().getTime()}.png`;
       const formData = new FormData();
       formData.append('file', file, fileName);
       formData.append('categoryId', categoryid);
@@ -58,42 +55,46 @@ export default () => ({
           contentType: false
         });
       } catch (error) {
-        return console.error(error);
+        console.error(error);
       }
     };
 
     const run = async () => {
-      if (isFinished) {
+      if (!isFinished) {
+        $timer.textContent = `00:00:${timer < 10 ? '0' + timer : timer}`;
+        timer -= 1;
+        isFinished = timer < 0;
+      } else {
         clearInterval(countdown);
         const {
           data: { id: drawingId }
         } = await uploadDrawing();
-
-        // console.log(categoryid, drawingId);
-
         $drawingContainer.innerHTML += `<div class="layer"></div>
         <div class="popup">
           <h2>게임이 종료되었어요!</h2> 
           <p> 다른 사람들은 어떻게 그렸는지 확인하러 갈까요?</p>
           <a class="close-popup" href="/result?categoryId=${categoryid}&drawingId=${drawingId}">결과 보기</a>
         </div>`;
-      } else {
-        $timer.textContent = `00:00:${timer < 10 ? '0' + timer : timer}`;
-        timer -= 1;
-        isFinished = timer < 0;
       }
     };
-    countdown = setInterval(run, 1000);
 
-    const draw = e => {
-      const x = e.type === 'touchmove' ? e.changedTouches[0].pageX - e.target.getBoundingClientRect().left : e.offsetX;
-      const y = e.type === 'touchmove' ? e.changedTouches[0].pageY - e.target.getBoundingClientRect().top : e.offsetY;
+    const drawLine = (x, y) => {
       if (isDrawing) {
         ctx.lineTo(x, y);
         ctx.stroke();
       } else {
         ctx.moveTo(x, y);
       }
+    };
+    const moveMouse = e => {
+      const x = e.offsetX;
+      const y = e.offsetY;
+      drawLine(x, y);
+    };
+    const moveTouchScreen = e => {
+      const x = e.changedTouches[0].pageX - e.target.getBoundingClientRect().left;
+      const y = e.changedTouches[0].pageY - e.target.getBoundingClientRect().top;
+      drawLine(x, y);
     };
 
     const startDrawing = () => {
@@ -106,11 +107,13 @@ export default () => ({
       ctx.closePath();
     };
 
+    countdown = setInterval(run, 1000);
+
+    $canvas.addEventListener('mousemove', moveMouse);
     $canvas.addEventListener('mousedown', startDrawing);
-    $canvas.addEventListener('mousemove', draw);
     $canvas.addEventListener('mouseup', finishDrawing);
 
-    $canvas.addEventListener('touchmove', draw);
+    $canvas.addEventListener('touchmove', moveTouchScreen);
     $canvas.addEventListener('touchstart', startDrawing);
     $canvas.addEventListener('touchend', finishDrawing);
     $canvas.addEventListener('touchcancel', finishDrawing);

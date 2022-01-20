@@ -1,50 +1,61 @@
 import axios from 'axios';
+import render from '../router.js';
 
 export default () => ({
   async getData(query) {
     query = query || 'categoryId=1';
-    const categoryId = query.split('=')[1];
+    const [_, categoryId] = query.split('=');
     const { data: categoryName } = await axios.get(`category/${categoryId}/name`);
+    const { data: maxLength } = await axios.get(`category/length`);
     const { data: ranking } = await axios.get(`drawings/category/${categoryId}?sortBy=like`);
-    return { data: { categoryName, ranking } };
+
+    return { data: { categoryId, categoryName, maxLength, ranking } };
   },
 
-  getHtml({ ranking, categoryName }) {
+  getHtml({ categoryId, categoryName, maxLength, ranking }) {
     const USER_ID = 1;
-    return (
-      `<section class="ranking-container">
-				<h2 class="category-title">주제: ${categoryName}</h2>
-				<div class="drawings">` +
-      ranking
-        .map(
-          ({ id, likedUserId, url, nickname, profile }) => `
-					<figure data-id="${id}">
-					<div class="img-container">
-						<img src="${url}">
-					</div>
-					<figcaption>
+    const rankingElement = ranking
+      .map(
+        ({ id, likedUserId, url, nickname, profile }) => `
+			<figure data-id="${id}">
+				<div class="img-container">
+					<img src="${url}">
+				</div>
+				<figcaption>
 					<img src="${profile}" class="profile"/>
 					<div class="info-container">
 						<span class="nickname">${nickname}</span>
 						<div class="like--group">
-						<i class="${likedUserId.includes(USER_ID) ? 'fas fa-heart' : 'far fa-heart'} like"></i>
+							<i class="${likedUserId.includes(USER_ID) ? 'fas fa-heart' : 'far fa-heart'} like"></i>
 							<span>${likedUserId.length}</span>
 						</div>
 					</div>
-					</figcaption>
-					</figure>
-          `
-        )
-        .join('') +
-      `</div>
-			<a href="/" class="fas fa-3x fa-home home"></a>
-			</section>`
-    );
+				</figcaption>
+			</figure>
+			`
+      )
+      .join('');
+
+    return `
+			<section class="ranking-container">
+        <button class="prev"><</button>
+        <h2 data-id="${categoryId}" data-length="${maxLength}" class="category-title">주제: ${categoryName}</h2>
+        <button class="next">></button>
+				<div class="drawings">
+					${rankingElement}
+				</div>
+				<a href="/" class="fas fa-3x fa-home home"></a>
+			</section>`;
   },
 
   eventBinding(el) {
     const USER_ID = 1;
-    const likebuttonGroups = [...el.querySelectorAll('.like--group')];
+    const $drawings = el.querySelector('.drawings');
+    const $prevButton = el.querySelector('.prev');
+    const $nextButton = el.querySelector('.next');
+    const $categoryTitle = el.querySelector('.category-title');
+    const id = +$categoryTitle.dataset.id;
+    const length = +$categoryTitle.dataset.length;
 
     const renderLikeGroup = (el, likedUserId) => {
       el.innerHTML = `
@@ -53,10 +64,10 @@ export default () => ({
       `;
     };
 
-    const toggleLiked = async e => {
-      if (!e.target.matches('.like')) return;
-      const { id } = e.target.closest('figure').dataset;
-      const $likeGroup = e.target.closest('.like--group');
+    const toggleLiked = async ({ target }) => {
+      if (!target.matches('.like')) return;
+      const { id } = target.closest('figure').dataset;
+      const $likeGroup = target.closest('.like--group');
       const { data: likedUserId } = await axios.patch(`/drawings/${id}`, {
         userId: USER_ID
       });
@@ -64,8 +75,24 @@ export default () => ({
       renderLikeGroup($likeGroup, likedUserId);
     };
 
-    likebuttonGroups.forEach(likebutton => {
-      likebutton.onclick = toggleLiked;
-    });
+    const getPrevCategory = e => {
+      const prevId = id - 1 === 0 ? length : id - 1;
+      const query = prevId === 1 ? '' : `?categoryId=${prevId}`;
+      window.history.pushState({}, null, `/ranking${query}`);
+      render(document.querySelector('#root'), '/ranking', query);
+    };
+
+    const getNextCategory = e => {
+      const nextId = id === length ? 1 : id + 1;
+      const query = nextId === 1 ? '' : `?categoryId=${nextId}`;
+      // const query = id === length ? '' : `?categoryId=${id + 1}`;
+      window.history.pushState({}, null, `/ranking${query}`);
+      render(document.querySelector('#root'), '/ranking', query);
+    };
+
+    $prevButton.addEventListener('click', getPrevCategory);
+    $nextButton.addEventListener('click', getNextCategory);
+
+    $drawings.addEventListener('click', toggleLiked);
   }
 });

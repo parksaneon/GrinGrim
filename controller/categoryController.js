@@ -1,8 +1,7 @@
 import { fintCategoryById, getCategories, randomIndex } from '../fakeData/categories.js';
 
 export const sendCategory = (req, res) => {
-  const categoryName = req.query.category;
-  res.send(`${fintCategoryById(categoryName).id}`);
+  res.send(getCategories());
 };
 
 export const sendCategoryName = (req, res) => {
@@ -13,4 +12,8 @@ export const sendCategoryName = (req, res) => {
 
 export const sendRandomCategory = (req, res) => {
   res.send(getCategories()[randomIndex()]);
+};
+
+export const sendCategoryLength = (req, res) => {
+  res.send(`${getCategories().length}`);
 };
