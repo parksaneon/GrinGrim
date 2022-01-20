@@ -5,7 +5,19 @@ const categories = [
   },
   {
     id: 2,
-    name: '퇴근'
+    name: '이웅모 강사님'
+  },
+  {
+    id: 3,
+    name: '도라에몽'
+  },
+  {
+    id: 4,
+    name: '또가스'
+  },
+  {
+    id: 5,
+    name: '잔망루피'
   }
 ];
 
