@@ -8,7 +8,7 @@ export default () => ({
   getHtml({ id, name: subject }) {
     return `
     <section class="drawing-container">
-      <time class="timer">00:00:30</time>
+      <time class="timer">00:00:20</time>
       <div class="canvas-container">
         <canvas class="my-canvas" width="500" height="500"></canvas>
       </div>
@@ -19,7 +19,7 @@ export default () => ({
     </section>`;
   },
 
-  eventBinding(el) {
+  eventBinding(el, userId) {
     const $canvas = el.querySelector('.my-canvas');
     const $drawingContainer = el.querySelector('.drawing-container');
     const $timer = el.querySelector('.timer');
@@ -27,7 +27,7 @@ export default () => ({
 
     let countdown = null;
     let isDrawing = false;
-    let timer = 1;
+    let timer = 20;
     let isFinished = false;
 
     const ctx = $canvas.getContext('2d');
@@ -47,7 +47,7 @@ export default () => ({
       const formData = new FormData();
       formData.append('file', file, fileName);
       formData.append('categoryId', categoryid);
-      formData.append('userId', 1);
+      formData.append('userId', userId);
       try {
         return axios.post('/drawings', formData, {
           withCredentials: true,
