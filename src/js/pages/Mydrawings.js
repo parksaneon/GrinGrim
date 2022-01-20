@@ -3,18 +3,14 @@ import axios from 'axios';
 export default () => ({
   async getData() {
     const USER_ID = 1;
+    const { data: categories } = await axios.get('/category');
     const { data: mydrawings } = await axios.get(`/drawings/userid/${USER_ID}`);
-    const categoryNamePromise = mydrawings.map(({ categoryId }) => axios.get(`/category/${categoryId}/name`));
-    const categoryNames = await Promise.all(categoryNamePromise);
 
-    let mydrawingsWithCategoryName = [];
-
-    mydrawings.forEach((mydrawing, index) => {
-      mydrawingsWithCategoryName = [
-        ...mydrawingsWithCategoryName,
-        { ...mydrawing, categoryName: categoryNames[index].data }
-      ];
-    });
+    const getCategoryName = categoryId => categories.find(({ id }) => id === categoryId).name;
+    const mydrawingsWithCategoryName = mydrawings.map(mydrawing => ({
+      ...mydrawing,
+      categoryName: getCategoryName(mydrawing.categoryId)
+    }));
 
     return { data: mydrawingsWithCategoryName };
   },
