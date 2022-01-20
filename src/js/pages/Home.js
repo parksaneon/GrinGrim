@@ -231,14 +231,8 @@ export default () => ({
       toggleModal();
     });
 
-<<<<<<< HEAD
     $buttonWrap.addEventListener('click', ({ target }) => {
       if (!target.matches('button')) return;
-=======
-    $main.addEventListener('click', e => {
-      if (e.target.classList.contains('btn--logOut')) logOut();
-      else if (e.target.matches('.open--signForm') && !doingNow) toggleModal();
->>>>>>> fcccb120af204309e4917f8df02146d61da29ce7
 
       if (target.matches('.btn--logOut')) {
         logOut();
