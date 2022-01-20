@@ -19,7 +19,7 @@ export default () => ({
     </section>`;
   },
 
-  eventBinding(el) {
+  eventBinding(el, userId) {
     const $canvas = el.querySelector('.my-canvas');
     const $drawingContainer = el.querySelector('.drawing-container');
     const $timer = el.querySelector('.timer');
@@ -47,7 +47,7 @@ export default () => ({
       const formData = new FormData();
       formData.append('file', file, fileName);
       formData.append('categoryId', categoryid);
-      formData.append('userId', 1);
+      formData.append('userId', userId);
       try {
         return axios.post('/drawings', formData, {
           withCredentials: true,

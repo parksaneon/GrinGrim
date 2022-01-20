@@ -66,7 +66,7 @@ const signUpForm = `
 export default () => ({
   async getData() {
     try {
-      const res = await axios.get('http://localhost:8000/auth/isAuth', {
+      const res = await axios.get('http://localhost:8000/auth', {
         withCredentials: true
       });
       return res;
@@ -76,6 +76,7 @@ export default () => ({
   },
 
   getHtml({ userId }) {
+    console.log(userId);
     return `
           <h1 class="logo">
             <img src="img/title.svg" alt="" />
@@ -126,7 +127,6 @@ export default () => ({
     };
 
     const routingIndex = () => {
-      console.log(doingNow);
       router(document.getElementById('root'), '/');
     };
 
@@ -136,8 +136,7 @@ export default () => ({
           acc[key] = value;
           return acc;
         }, {});
-        const res = await sendUserReq(formData);
-        console.log(res);
+        await sendUserReq(formData);
         toggleModal();
         routingIndex();
       } catch (error) {
@@ -219,11 +218,14 @@ export default () => ({
     };
 
     const logOut = async () => {
-      const res = await axios.post('http://localhost:8000/auth/logOut', null, {
-        withCredentials: true
-      });
-      console.log(res);
-      routingIndex();
+      try {
+        await axios.post('http://localhost:8000/auth/logOut', null, {
+          withCredentials: true
+        });
+        routingIndex();
+      } catch (error) {
+        console.error(error);
+      }
     };
 
     $body.addEventListener('click', ({ target }) => {
