@@ -240,8 +240,6 @@ export default () => ({
     });
 
     $main.addEventListener('click', e => {
-      e.preventDefault();
-
       if (e.target.classList.contains('btn--logOut')) logOut();
       else if (e.target.matches('.open--signForm') && !doingNow) toggleModal();
 
