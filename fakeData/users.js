@@ -2,14 +2,30 @@ let users = [
   {
     id: 1,
     userId: 'bnb135',
-    profile: 'images/users/2.jpg',
+    profile: 'images/users/1.jpg',
     password: '$2b$10$Vg/ijKMZKg8c/1C9RnTXduLiUvabxqH2aJ6CBoFL4xHVSn6u8R51m',
     nickName: '박상언'
   },
   {
     id: 2,
-    profile: 'images/users/3.png',
+    userId: 'bnb136',
+    profile: 'images/users/2.jpg',
+    password: '$2b$10$Vg/ijKMZKg8c/1C9RnTXduLiUvabxqH2aJ6CBoFL4xHVSn6u8R51m',
     nickName: '최한나'
+  },
+  {
+    id: 3,
+    userId: 'bnb137',
+    profile: 'images/users/3.jpg',
+    password: '$2b$10$Vg/ijKMZKg8c/1C9RnTXduLiUvabxqH2aJ6CBoFL4xHVSn6u8R51m',
+    nickName: '여은성'
+  },
+  {
+    id: 4,
+    userId: 'bnb138',
+    profile: 'images/users/',
+    password: '$2b$10$Vg/ijKMZKg8c/1C9RnTXduLiUvabxqH2aJ6CBoFL4xHVSn6u8R51m',
+    nickName: ''
   }
 ];
 
