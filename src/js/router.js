@@ -17,11 +17,11 @@ const routes = [
 const getComponent = path =>
   (routes.find(route => route.path === path) || routes.find(route => route.path === '**')).component();
 
-const render = async (el, path, query) => {
+const router = async (el, path, query) => {
   const page = getComponent(path);
   const { data } = await page.getData(query);
-  el.innerHTML = await page.getHtml(data);
+  el.innerHTML = page.getHtml(data);
   page.eventBinding(el);
 };
 
-export default render;
+export default router;
