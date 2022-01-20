@@ -43,7 +43,7 @@ export const signUp = (req, res) => {
     const hashedPassword = bcrypt.hashSync(password, 10);
     addNewUser({ id, userId, password: hashedPassword, nickName, userImage });
 
-    const accessToken = createToken(userId);
+    const accessToken = createToken(id);
     setTokenInCookie(res, accessToken);
 
     res.status(201).json({ message: '회원가입 성공' });
