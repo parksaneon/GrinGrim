@@ -33,7 +33,7 @@ app.use('/auth', authRouter);
 app.use('/category', categoryRouter);
 app.use('/drawings', drawingsRouter);
 
-app.get('/*', (req, res) => {
+app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, 'src/index.html'));
 });
 
