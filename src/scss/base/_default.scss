@@ -13,6 +13,7 @@
 html {
   overflow-y: visible;
   overflow-x: hidden;
+  background: $backGround;
 }
 
 body.open--modal::after {

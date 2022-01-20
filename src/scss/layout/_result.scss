@@ -1,6 +1,6 @@
 @use '../utils/' as *;
 @use '../base/' as *;
-
+@use '../component/' as *;
 .result-container {
   position: relative;
   display: flex;
@@ -41,16 +41,19 @@
     }
 
     figcaption {
-      margin: rem(10px) 0;
       display: flex;
-      font-size: 1.6rem;
+      width: 50%;
+      margin: rem(10px) 0;
+      padding: 2%;
+      font-size: 1.2rem;
+    }
+    .profile {
+      @include profile;
+    }
+    .info-container {
+      @include info-container;
     }
   }
-}
-
-.nickname {
-  flex-grow: 1;
-  text-align: center;
 }
 
 .like {
@@ -60,7 +63,7 @@
 
 .home {
   position: absolute;
-  padding: 2%;
+  padding: 1%;
   top: calc(50px - 2%);
   right: rem(50px);
   color: #ff9704;

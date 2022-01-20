@@ -1,5 +1,6 @@
 @use '../utils/' as *;
 @use '../base/' as *;
+@use '../component/' as *;
 
 .ranking-container {
   position: relative;
@@ -47,10 +48,15 @@
 
   figcaption {
     display: flex;
-    background: #fff;
     width: 50%;
     margin: 0 auto;
     padding: 2%;
     font-size: 1.2rem;
+  }
+  .profile {
+    @include profile;
+  }
+  .info-container {
+    @include info-container;
   }
 }

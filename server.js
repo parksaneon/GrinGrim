@@ -2,15 +2,15 @@ import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
+import path from 'path';
 
 import authRouter from './router/authRouter.js';
-import isAuth from './middleware/auth.js';
 import drawingsRouter from './router/drawingsRouter.js';
 import categoryRouter from './router/categoryRouter.js';
 
-dotenv.config();
+const __dirname = path.resolve();
 
-// const __dirname = path.resolve();
+dotenv.config();
 
 const app = express();
 const port = 8000;
@@ -33,21 +33,11 @@ app.use('/auth', authRouter);
 app.use('/category', categoryRouter);
 app.use('/drawings', drawingsRouter);
 
-app.use('/', isAuth, (req, res) => {
-  console.log('요청 옴');
-  res.json({ isLogin: true });
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'src/index.html'));
 });
-
-// app.get('/', isAuth, (req, res) => {
-//   console.log(req.userId);
-//   res.json({ isLogin: true });
-// });
 
 // port 생성 서버 실행
 app.listen(port, () => {
   console.log('Server running ....');
 });
-
-// app.get('/*', (req, res) => {
-//   res.sendFile(path.resolve('/', 'index.html'));
-// });

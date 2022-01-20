@@ -6,10 +6,10 @@ const isAuth = (req, res, next) => {
   jwt.verify(accessToken, process.env.JWT_SECRET_KEY, (error, decoded) => {
     if (error) {
       console.log('토큰 없음');
-      res.json({ isLogin: false });
+      res.json({ message: '다시 로그인 해주세요!' });
     } else {
       console.log('로그인 성공!');
-      req.userId = decoded.userId;
+      req.id = decoded.id;
       next();
     }
   });

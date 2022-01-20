@@ -1,4 +1,4 @@
-import { getNickname } from './users.js';
+import { getNickname, getProfile } from './users.js';
 
 let drawings = [
   {
@@ -53,12 +53,17 @@ const toggleUserId = (likedUserId, userId) =>
 
 export const generateDrawingId = () => (drawings[drawings.length - 1]?.id || 0) + 1;
 export const findDrawingsById = userId => drawings.filter(drawing => drawing.userId === +userId);
+export const findDrawingsByCategory = categoryId => drawings.filter(drawing => drawing.categoryId === +categoryId);
+export const findDrawingById = id => drawings.find(drawing => drawing.id === +id);
+
 export const findDrawingsByDrawId = (drawingid, drawings = getDrawings()) =>
+  drawings.filter(drawing => drawing.userId === +drawingid);
+
+export const findDrawingsByDiffDrawId = (drawingid, drawings = getDrawings()) =>
   drawings.filter(drawing => drawing.userId !== +drawingid);
+
 export const findDrawingByDrawId = (drawingid, drawings = getDrawings()) =>
   drawings.find(drawing => drawing.id === +drawingid);
-export const findDrawingById = id => drawings.find(drawing => drawing.id === +id);
-export const findDrawingsByCategory = categoryId => drawings.filter(drawing => drawing.categoryId === +categoryId);
 
 export const newDrawingsWithUNickName = (drawings, nickName) =>
   drawings.map(drawing => ({
@@ -66,10 +71,11 @@ export const newDrawingsWithUNickName = (drawings, nickName) =>
     nickname: nickName
   }));
 
-export const newDrawingsWithDNickName = drawings =>
+export const newDrawingsWithUserInfo = drawings =>
   drawings.map(drawing => ({
     ...drawing,
-    nickname: getNickname(drawing.userId)
+    nickname: getNickname(drawing.userId),
+    profile: getProfile(drawing.userId)
   }));
 
 export const drawingsSortedByLiked = drawings =>

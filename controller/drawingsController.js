@@ -1,10 +1,11 @@
 import {
   addNewDrawing,
-  newDrawingsWithDNickName,
+  newDrawingsWithUserInfo,
   findDrawingsByCategory,
   findDrawingById,
   setDrawingLikedById,
   findDrawingsByDrawId,
+  findDrawingsByDiffDrawId,
   drawingsSortedByDate,
   drawingsSortedByLiked,
   generateDrawingId,
@@ -13,12 +14,11 @@ import {
 
 export const sendDrawingsByCategory = (req, res) => {
   const { category } = req.query;
-  res.send(drawingsSortedByLiked(newDrawingsWithDNickName(findDrawingsByCategory(category))));
+  res.send(drawingsSortedByLiked(newDrawingsWithUserInfo(findDrawingsByCategory(category))));
 };
 
 export const sendDrawingsByDrwaingId = (req, res) => {
   const { drawingid } = req.params;
-  console.log(findDrawingByDrawId(drawingid));
   res.send(findDrawingByDrawId(drawingid));
 };
 
@@ -30,14 +30,12 @@ export const sendDrawingsByUserId = (req, res) => {
 export const sendDrawingsByCategoryId = (req, res) => {
   const { categoryid } = req.params;
   const { drawingId, sortBy } = req.query;
-  const drawingsFilterByDrawingId = findDrawingsByDrawId(drawingId, findDrawingsByCategory(categoryid));
-  console.log('요청 옴');
-  // drawing.id !== +drawingId
+  const drawingsFilterByDrawingId = findDrawingsByDiffDrawId(drawingId, findDrawingsByCategory(categoryid));
   const drawingsSortedBy =
     sortBy === 'date'
       ? drawingsSortedByDate(drawingsFilterByDrawingId)
       : drawingsSortedByLiked(drawingsFilterByDrawingId);
-  res.send(newDrawingsWithDNickName(drawingsSortedBy));
+  res.send(newDrawingsWithUserInfo(drawingsSortedBy));
 };
 
 export const addDrawing = (req, res) => {
@@ -46,7 +44,7 @@ export const addDrawing = (req, res) => {
   const { userId, categoryId } = req.body;
   const newDrawing = {
     id,
-    userId,
+    userId: +userId,
     url: req.file.destination + req.file.originalname,
     categoryId,
     likedUserId: []

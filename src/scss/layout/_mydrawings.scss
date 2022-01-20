@@ -43,8 +43,11 @@
     margin: 30px auto;
     padding: 2%;
     font-size: 1.2rem;
-    * {
-      margin: 10px 0;
+    p,
+    .like-group {
+      padding: 5%;
+      width: 100%;
+      text-align: center;
     }
   }
   .icon-giraffe {
