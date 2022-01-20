@@ -60,7 +60,7 @@ export default () => ({
 
   eventBinding(el) {
     const USER_ID = 1;
-    const likebuttonGroups = [...el.querySelectorAll('.like--group')];
+    const $drawings = el.querySelectorAll('.drawings');
 
     const renderLikeGroup = (el, likedUserId) => {
       el.innerHTML = `
@@ -80,8 +80,6 @@ export default () => ({
       renderLikeGroup($likeGroup, likedUserId);
     };
 
-    likebuttonGroups.forEach(likebutton => {
-      likebutton.onclick = toggleLiked;
-    });
+    $drawings.addEventListener('click', toggleLiked);
   }
 });
