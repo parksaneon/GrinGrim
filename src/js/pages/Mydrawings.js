@@ -15,10 +15,7 @@ export default () => ({
     return { data: mydrawingsWithCategoryName };
   },
 
-  getHtml({ userId, ...rest }) {
-    const { length } = Object.keys(rest);
-    const mydrawings = Array.from({ ...rest, length });
-
+  getHtml(mydrawings) {
     const myDrawingElement = mydrawings.length
       ? mydrawings
           .map(
