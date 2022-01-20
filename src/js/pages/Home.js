@@ -1,4 +1,67 @@
 import axios from 'axios';
+import router from '../router.js';
+
+const notLoginView = `
+  <button class="open--signForm signIn--open">로그인</button>
+  <button class="open--signForm signUp--open">회원가입</button>
+`;
+
+const loginView = `
+  <button class="btn--logOut">로그아웃</button>
+  <a href="/mydrawings">
+    <i class="fas fa-solid fa-images"></i>
+    내 그림
+  </a>
+  <a href="/ranking">
+    <i class="fas fa-solid fa-trophy"></i>
+    랭킹
+  </a>
+  <a href="/draw">
+    <i class="fas fa-paint-brush"></i>
+    그림 그리기
+  </a>
+`;
+
+const signInForm = `
+  <button class="close--modal">닫기</button>
+  <form method="post" class="signInForm" >
+    <div>
+      <label for="userId">아이디</label>
+      <input type="text" id="userId" name="userId" placeholder="아이디" required />
+    </div>
+    <div>
+      <label for="password">비밀번호</label>
+      <input type="password" id="password" name="password" placeholder="비밀번호" required />
+    </div>
+    <button type="submit">로그인</button>
+  </form>
+`;
+
+const signUpForm = `
+  <button class="close--modal">닫기</button>
+  <form method="post" class="signUpForm" enctype="multipart/form-data">
+    <div>
+      <label for="userId">아이디</label>
+      <input type="text" id="userId" class="check--input" name="userId" placeholder="아이디" required autocomplete="on"/>
+      <span class="id--informText"></span>
+    </div>
+    <div>
+      <label for="password">비밀번호</label>
+      <input type="password" id="password"  class="check--input" name="password" placeholder="비밀번호" required autocomplete="on"/>
+      <span class="pwd--informText"></span>
+    </div>
+    <div>
+      <label for="nickName">닉네임</label>
+      <input type="text" id="nickName" name="nickName" placeholder="닉네임" required autocomplete="on"/>
+    </div>
+    <div class="upload-box">
+    <label for="userImage">이곳을 클릭하거나 이미지를 드래그 하세요</label>
+      <input type="file" id="userImage" name="userImage" required value=""/>
+      <img src="" alt="" class="showImage"/>
+    </div>
+    <button type="submit">회원가입</button>
+  </form>
+`;
 
 export default () => ({
   async getData() {
@@ -27,41 +90,15 @@ export default () => ({
               </div>
             </div>
             <div class="bottom--section">
-              ${userId ? this.loginView : this.notLoginView}
+              ${userId ? loginView : notLoginView}
             </div>
           </main>
           <div class="form--wrap"></div>
         `;
   },
 
-  loginView: `
-    <button class="btn--logOut">로그아웃</button>
-    <a href="/mydrawings">
-      <i class="fas fa-solid fa-images"></i>
-      내 그림
-    </a>
-    <a href="/ranking">
-      <i class="fas fa-solid fa-trophy"></i>
-      랭킹
-    </a>
-    <a href="/draw">
-      <i class="fas fa-paint-brush"></i>
-      그림 그리기
-    </a>
-  `,
-
-  notLoginView: `
-    <button class="open--signForm signIn--open">로그인</button>
-    <button class="open--signForm signUp--open">회원가입</button>
-  `,
-
-  renderLogin(userId) {
-    document.querySelector('.bottom--section').innerHTML = userId ? this.loginView : this.notLoginView;
-  },
-
   eventBinding() {
     const $body = document.querySelector('body');
-    const $main = document.querySelector('.main');
     const $buttonWrap = document.querySelector('.bottom--section');
     const $formWrap = document.querySelector('.form--wrap');
     let doingNow = null;
@@ -71,66 +108,26 @@ export default () => ({
       isValidPwd: false
     };
 
-    const renderLogin = () => {
-      $buttonWrap.innerHTML = this.loginView;
-    };
-
     const toggleModal = () => {
       doingNow = null;
       $body.classList.toggle('open--modal');
       $formWrap.innerHTML = '';
     };
 
-    const renderSignIn = () => {
-      $formWrap.innerHTML = `
-          <button class="close--modal">닫기</button>
-          <form method="post" class="signInForm" >
-            <div>
-              <label for="userId">아이디</label>
-              <input type="text" id="userId" name="userId" placeholder="아이디" required />
-            </div>
-            <div>
-              <label for="password">비밀번호</label>
-              <input type="password" id="password" name="password" placeholder="비밀번호" required />
-            </div>
-            <button type="submit">로그인</button>
-          </form>
-        `;
-    };
-
-    const renderSignUp = () => {
-      $formWrap.innerHTML = `
-          <button class="close--modal">닫기</button>
-          <form method="post" class="signUpForm" enctype="multipart/form-data">
-            <div>
-              <label for="userId">아이디</label>
-              <input type="text" id="userId" name="userId" placeholder="아이디" required autocomplete="on"/>
-              <span class="id--informText"></span>
-            </div>
-            <div>
-              <label for="password">비밀번호</label>
-              <input type="password" id="password" name="password" placeholder="비밀번호" required autocomplete="on"/>
-              <span class="pwd--informText"></span>
-            </div>
-            <div>
-              <label for="nickName">닉네임</label>
-              <input type="text" id="nickName" name="nickName" placeholder="닉네임" required autocomplete="on"/>
-            </div>
-            <div class="upload-box">
-            <label for="userImage">이곳을 클릭하거나 이미지를 드래그 하세요</label>
-              <input type="file" id="userImage" name="userImage" required value=""/>
-              <img src="" alt="" class="showImage"/>
-            </div>
-            <button type="submit">회원가입</button>
-          </form>
-        `;
+    const renderForm = () => {
+      $formWrap.innerHTML = doingNow === 'signUp' ? signUpForm : signInForm;
     };
 
     const sendUserReq = async formData => {
-      const res = await axios.post(`/auth/${doingNow}`, formData, {
+      const res = await axios.post(`http://localhost:8000/auth/${doingNow}`, formData, {
         withCredentials: true
       });
       return res;
+    };
+
+    const routingIndex = () => {
+      console.log(doingNow);
+      router(document.getElementById('root'), '/');
     };
 
     const signIn = async formElement => {
@@ -140,9 +137,9 @@ export default () => ({
           return acc;
         }, {});
         const res = await sendUserReq(formData);
-        if (res.status === 201) renderLogin();
+        console.log(res);
         toggleModal();
-        doingNow = null;
+        routingIndex();
       } catch (error) {
         console.error(error);
         alert('아이디 혹은 비밀번호가 일치하지 않습니다!');
@@ -152,10 +149,9 @@ export default () => ({
     const signUp = async formElement => {
       try {
         const formData = new FormData(formElement);
-        const res = await sendUserReq(formData);
-        if (res.status === 201) renderLogin();
+        await sendUserReq(formData);
         toggleModal();
-        doingNow = null;
+        routingIndex();
       } catch (error) {
         console.error(error);
         alert('회원가입을 실패했습니다.');
@@ -164,34 +160,32 @@ export default () => ({
 
     const checkIdRxp = (() => {
       const regExp = /^[a-z0-9]{5,19}$/g;
-
-      return tempId => regExp.test(tempId);
+      return checkingId => regExp.test(checkingId);
     })();
 
-    const checkValidId = tempId => {
+    const checkValidId = checkingId => {
       const idInformText = document.querySelector('.id--informText');
 
-      if (!checkIdRxp(tempId)) {
+      if (!checkIdRxp(checkingId)) {
         idInformText.innerText = '영문자, 숫자로 6~20자로 조합해주세요';
         return;
       }
 
-      let timer = null;
-      if (timer) clearTimeout(timer);
+      let checkIdRequest = null;
+      if (checkIdRequest) clearTimeout(checkIdRequest);
 
-      timer = setTimeout(async () => {
+      checkIdRequest = setTimeout(async () => {
+        let resultCheckid = null;
+
         try {
-          const res = await axios.post(`/auth/checkId`, { tempId }, { withCredentials: true });
-          if (res.status === 201) {
-            idInformText.innerText = '사용 가능한 아이디 입니다.';
-            userSignUp.isValidId = true;
-            idInformText.classList.add('valid');
-          }
+          resultCheckid = await axios.post(`/auth/checkId`, { checkingId }, { withCredentials: true });
         } catch (error) {
           console.error(error);
-          idInformText.innerText = '중복된 아이디 입니다.';
-          userSignUp.isValidId = false;
-          idInformText.classList.remove('valid');
+        } finally {
+          resultCheckid = !!resultCheckid;
+          idInformText.innerText = resultCheckid ? '사용 가능한 아이디 입니다.' : '중복된 아이디 입니다.';
+          userSignUp.isValidId = resultCheckid;
+          idInformText.classList.add('valid', resultCheckid);
         }
       }, 500);
     };
@@ -199,21 +193,19 @@ export default () => ({
     const checkValidPwd = (() => {
       const regExp = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,16}$/;
 
-      return tempPwd => {
+      return checkingPwd => {
         const pwdInformText = document.querySelector('.pwd--informText');
-        if (regExp.test(tempPwd)) {
-          userSignUp.isValidPwd = true;
-          pwdInformText.innerText = '사용 가능한 패스워드입니다.';
-          pwdInformText.classList.add('valid');
-        } else {
-          userSignUp.isValidPwd = false;
-          pwdInformText.innerText = '8 ~ 16자 영문, 숫자, 특수문자를 최소 한가지씩 조합해주세요.';
-          pwdInformText.classList.remove('valid');
-        }
+        const resultPassTest = regExp.test(checkingPwd);
+
+        userSignUp.isValidPwd = resultPassTest;
+        pwdInformText.innerText = resultPassTest
+          ? '사용 가능한 패스워드입니다.'
+          : '8 ~ 16자 영문, 숫자, 특수문자를 최소 한가지씩 조합해주세요.';
+        pwdInformText.classList.toggle('valid', regExp.test(checkingPwd));
       };
     })();
 
-    const showDropImage = input => {
+    const showUploadImage = input => {
       if (!input.files[0]) return;
 
       const reader = new FileReader();
@@ -227,48 +219,55 @@ export default () => ({
     };
 
     const logOut = async () => {
-      const {
-        data: { userId }
-      } = await axios.post('/auth/logOut', null, {
+      const res = await axios.post('http://localhost:8000/auth/logOut', null, {
         withCredentials: true
       });
-      this.renderLogin(userId);
+      console.log(res);
+      routingIndex();
     };
 
     $body.addEventListener('click', ({ target }) => {
-      if (target.matches('.open--modal')) toggleModal();
+      if (!target.matches('.open--modal')) return;
+      toggleModal();
     });
 
+<<<<<<< HEAD
+    $buttonWrap.addEventListener('click', ({ target }) => {
+      if (!target.matches('button')) return;
+=======
     $main.addEventListener('click', e => {
       if (e.target.classList.contains('btn--logOut')) logOut();
       else if (e.target.matches('.open--signForm') && !doingNow) toggleModal();
+>>>>>>> fcccb120af204309e4917f8df02146d61da29ce7
 
-      if (e.target.classList.contains('signIn--open')) {
-        doingNow = 'signIn';
-        renderSignIn();
-      } else if (e.target.classList.contains('signUp--open')) {
-        doingNow = 'signUp';
-        renderSignUp();
+      if (target.matches('.btn--logOut')) {
+        logOut();
+      } else {
+        toggleModal();
+        doingNow = target.matches('.signIn--open') ? 'signIn' : 'signUp';
+        renderForm();
       }
     });
 
     $formWrap.addEventListener('keyup', ({ target }) => {
-      if (doingNow === 'signUp' && target.matches('#userId')) checkValidId(target.value);
-      if (doingNow === 'signUp' && target.matches('#password')) checkValidPwd(target.value);
+      if (doingNow !== 'signUp' || !target.matches('.check--input')) return;
+      target.matches('#userId') ? checkValidId(target.value) : checkValidPwd(target.value);
     });
 
     $formWrap.addEventListener('submit', e => {
       e.preventDefault();
-      if (doingNow === 'signIn') signIn(e.target);
-      else if (doingNow === 'signUp') signUp(e.target);
+      if (!doingNow) return;
+      doingNow === 'signIn' ? signIn(e.target) : signUp(e.target);
     });
 
     $formWrap.addEventListener('click', ({ target }) => {
-      if (target.matches('.close--modal')) toggleModal();
+      if (!target.matches('.close--modal')) return;
+      toggleModal();
     });
 
     $formWrap.addEventListener('change', ({ target }) => {
-      if (target.matches('#userImage')) showDropImage(target);
+      if (!target.matches('#userImage')) return;
+      showUploadImage(target);
     });
   }
 });

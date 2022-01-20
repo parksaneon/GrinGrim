@@ -60,7 +60,7 @@ export const findDrawingsByDrawId = (drawingid, drawings = getDrawings()) =>
   drawings.filter(drawing => drawing.userId === +drawingid);
 
 export const findDrawingsByDiffDrawId = (drawingid, drawings = getDrawings()) =>
-  drawings.filter(drawing => drawing.userId !== +drawingid);
+  drawings.filter(drawing => drawing.id !== +drawingid);
 
 export const findDrawingByDrawId = (drawingid, drawings = getDrawings()) =>
   drawings.find(drawing => drawing.id === +drawingid);

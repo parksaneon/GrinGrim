@@ -29,7 +29,8 @@ export const sendDrawingsByUserId = (req, res) => {
 
 export const sendDrawingsByCategoryId = (req, res) => {
   const { categoryid } = req.params;
-  const { drawingId, sortBy } = req.query;
+  const { sortBy } = req.query;
+  const drawingId = req.query['drawingId!'];
   const drawingsFilterByDrawingId = findDrawingsByDiffDrawId(drawingId, findDrawingsByCategory(categoryid));
   const drawingsSortedBy =
     sortBy === 'date'
@@ -46,7 +47,7 @@ export const addDrawing = (req, res) => {
     id,
     userId: +userId,
     url: req.file.destination + req.file.originalname,
-    categoryId,
+    categoryId: +categoryId,
     likedUserId: []
   };
 

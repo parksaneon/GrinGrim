@@ -40,9 +40,11 @@ export default () => ({
 
     return `
 			<section class="ranking-container">
-        <button class="prev"><</button>
-        <h2 data-id="${categoryId}" data-length="${maxLength}" class="category-title">주제: ${categoryName}</h2>
-        <button class="next">></button>
+				<div class="ranking-subject">
+        	<button class="prev"><</button>
+        	<h2 data-id="${categoryId}" data-length="${maxLength}" class="category-title">주제: ${categoryName}</h2>
+        	<button class="next">></button>
+				</div>
 				<div class="drawings">
 					${rankingElement}
 				</div>

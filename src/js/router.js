@@ -22,7 +22,7 @@ const getComponent = path =>
 
 const getNeedAuth = path => routes.find(route => route.path === path).needAuth || false;
 
-const render = async (el, path, query) => {
+const router = async (el, path, query) => {
   const needAuth = getNeedAuth(path);
   const { data: userId } = await axios.get('/auth');
   path = needAuth && !userId ? '***' : path;
@@ -33,4 +33,4 @@ const render = async (el, path, query) => {
   page.eventBinding(el, userId);
 };
 
-export default render;
+export default router;
