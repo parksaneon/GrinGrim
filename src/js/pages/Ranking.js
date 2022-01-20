@@ -5,15 +5,17 @@ export default () => ({
   async getData(query) {
     query = query || 'categoryId=1';
     const [_, categoryId] = query.split('=');
-    const { data: categoryName } = await axios.get(`category/${categoryId}/name`);
-    const { data: maxLength } = await axios.get(`category/length`);
-    const { data: ranking } = await axios.get(`drawings/category/${categoryId}?sortBy=like`);
-
-    return { data: { categoryId, categoryName, maxLength, ranking } };
+    try {
+      const { data: categoryName } = await axios.get(`category/${categoryId}/name`);
+      const { data: maxLength } = await axios.get(`category/length`);
+      const { data: ranking } = await axios.get(`drawings/category/${categoryId}?sortBy=like`);
+      return { data: { categoryId, categoryName, maxLength, ranking } };
+    } catch (error) {
+      console.error();
+    }
   },
 
-  getHtml({ categoryId, categoryName, maxLength, ranking }) {
-    const USER_ID = 1;
+  getHtml({ userId, categoryId, categoryName, maxLength, ranking }) {
     const rankingElement = ranking
       .map(
         ({ id, likedUserId, url, nickname, profile }) => `
@@ -26,7 +28,7 @@ export default () => ({
 					<div class="info-container">
 						<span class="nickname">${nickname}</span>
 						<div class="like--group">
-							<i class="${likedUserId.includes(USER_ID) ? 'fas fa-heart' : 'far fa-heart'} like"></i>
+							<i class="${likedUserId.includes(userId) ? 'fas fa-heart' : 'far fa-heart'} like"></i>
 							<span>${likedUserId.length}</span>
 						</div>
 					</div>
@@ -50,8 +52,7 @@ export default () => ({
 			</section>`;
   },
 
-  eventBinding(el) {
-    const USER_ID = 1;
+  eventBinding(el, userId) {
     const $drawings = el.querySelector('.drawings');
     const $prevButton = el.querySelector('.prev');
     const $nextButton = el.querySelector('.next');
@@ -61,7 +62,7 @@ export default () => ({
 
     const renderLikeGroup = (el, likedUserId) => {
       el.innerHTML = `
-        <i class="${likedUserId.includes(USER_ID) ? 'fas fa-heart' : 'far fa-heart'} like"></i>
+        <i class="${likedUserId.includes(userId) ? 'fas fa-heart' : 'far fa-heart'} like"></i>
         <span>${likedUserId.length}</span>
       `;
     };
@@ -71,7 +72,7 @@ export default () => ({
       const { id } = target.closest('figure').dataset;
       const $likeGroup = target.closest('.like--group');
       const { data: likedUserId } = await axios.patch(`/drawings/${id}`, {
-        userId: USER_ID
+        userId
       });
 
       renderLikeGroup($likeGroup, likedUserId);
@@ -85,9 +86,7 @@ export default () => ({
     };
 
     const getNextCategory = e => {
-      const nextId = id === length ? 1 : id + 1;
-      const query = nextId === 1 ? '' : `?categoryId=${nextId}`;
-      // const query = id === length ? '' : `?categoryId=${id + 1}`;
+      const query = id === length ? '' : `?categoryId=${id + 1}`;
       window.history.pushState({}, null, `/ranking${query}`);
       render(document.querySelector('#root'), '/ranking', query);
     };
