@@ -11,35 +11,36 @@ export default () => ({
 
   getHtml({ ranking, categoryName }) {
     const USER_ID = 1;
-    return (
-      `<section class="ranking-container">
-				<h2 class="category-title">주제: ${categoryName}</h2>
-				<div class="drawings">` +
-      ranking
-        .map(
-          ({ id, likedUserId, url, nickname, profile }) => `
-					<figure data-id="${id}">
-					<div class="img-container">
-						<img src="${url}">
-					</div>
-					<figcaption>
+    const rankingElement = ranking
+      .map(
+        ({ id, likedUserId, url, nickname, profile }) => `
+			<figure data-id="${id}">
+				<div class="img-container">
+					<img src="${url}">
+				</div>
+				<figcaption>
 					<img src="${profile}" class="profile"/>
 					<div class="info-container">
 						<span class="nickname">${nickname}</span>
 						<div class="like--group">
-						<i class="${likedUserId.includes(USER_ID) ? 'fas fa-heart' : 'far fa-heart'} like"></i>
+							<i class="${likedUserId.includes(USER_ID) ? 'fas fa-heart' : 'far fa-heart'} like"></i>
 							<span>${likedUserId.length}</span>
 						</div>
 					</div>
-					</figcaption>
-					</figure>
-          `
-        )
-        .join('') +
-      `</div>
-			<a href="/" class="fas fa-3x fa-home home"></a>
-			</section>`
-    );
+				</figcaption>
+			</figure>
+			`
+      )
+      .join('');
+
+    return `
+			<section class="ranking-container">
+				<h2 class="category-title">주제: ${categoryName}</h2>
+				<div class="drawings">
+					${rankingElement}
+				</div>
+				<a href="/" class="fas fa-3x fa-home home"></a>
+			</section>`;
   },
 
   eventBinding(el) {
