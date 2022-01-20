@@ -5,7 +5,11 @@ const categories = [
   },
   {
     id: 2,
-    name: '퇴근'
+    name: 'Ungmo Lee'
+  },
+  {
+    id: 3,
+    name: '도라에몽'
   }
 ];
 
