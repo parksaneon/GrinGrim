@@ -35,8 +35,8 @@ export default () => ({
           )
           .join('')
       : `
-          <div class="message">
-            <span>이런!</span>
+          <div class="no-data-found message">
+            <span class="message-title">이런!</span>
             <span>아직 활동 내역이 없어요.</span>
             <span>나만의 작품을 만들어 볼까요?</span>
           </div>
