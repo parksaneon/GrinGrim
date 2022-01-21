@@ -2,14 +2,79 @@ let users = [
   {
     id: 1,
     userId: 'bnb135',
-    profile: 'images/users/2.jpg',
+    profile: 'images/users/1.jpg',
     password: '$2b$10$Vg/ijKMZKg8c/1C9RnTXduLiUvabxqH2aJ6CBoFL4xHVSn6u8R51m',
-    nickName: '박상언'
+    nickName: '상언이'
   },
   {
     id: 2,
-    profile: 'images/users/3.png',
-    nickName: '최한나'
+    userId: 'bnb136',
+    profile: 'images/users/2.jpg',
+    password: '$2b$10$Vg/ijKMZKg8c/1C9RnTXduLiUvabxqH2aJ6CBoFL4xHVSn6u8R51m',
+    nickName: '한나초이'
+  },
+  {
+    id: 3,
+    userId: 'bnb137',
+    profile: 'images/users/3.jpg',
+    password: '$2b$10$Vg/ijKMZKg8c/1C9RnTXduLiUvabxqH2aJ6CBoFL4xHVSn6u8R51m',
+    nickName: '여은성'
+  },
+  {
+    id: 4,
+    userId: 'bnb138',
+    profile: 'images/users/4.jpg',
+    password: '$2b$10$Vg/ijKMZKg8c/1C9RnTXduLiUvabxqH2aJ6CBoFL4xHVSn6u8R51m',
+    nickName: '밍망디'
+  },
+  {
+    id: 5,
+    userId: 'bnb139',
+    profile: 'images/users/5.jpg',
+    password: '$2b$10$Vg/ijKMZKg8c/1C9RnTXduLiUvabxqH2aJ6CBoFL4xHVSn6u8R51m',
+    nickName: '루시안'
+  },
+  {
+    id: 6,
+    userId: 'bnb140',
+    profile: 'images/users/6.jpg',
+    password: '$2b$10$Vg/ijKMZKg8c/1C9RnTXduLiUvabxqH2aJ6CBoFL4xHVSn6u8R51m',
+    nickName: '조용필'
+  },
+  {
+    id: 7,
+    userId: 'bnb141',
+    profile: 'images/users/7.jpg',
+    password: '$2b$10$Vg/ijKMZKg8c/1C9RnTXduLiUvabxqH2aJ6CBoFL4xHVSn6u8R51m',
+    nickName: '천효'
+  },
+  {
+    id: 8,
+    userId: 'bnb142',
+    profile: 'images/users/8.jpg',
+    password: '$2b$10$Vg/ijKMZKg8c/1C9RnTXduLiUvabxqH2aJ6CBoFL4xHVSn6u8R51m',
+    nickName: '시골쥐'
+  },
+  {
+    id: 9,
+    userId: 'bnb143',
+    profile: 'images/users/9.jpg',
+    password: '$2b$10$Vg/ijKMZKg8c/1C9RnTXduLiUvabxqH2aJ6CBoFL4xHVSn6u8R51m',
+    nickName: '자두'
+  },
+  {
+    id: 10,
+    userId: 'bnb144',
+    profile: 'images/users/3.jpg',
+    password: '$2b$10$Vg/ijKMZKg8c/1C9RnTXduLiUvabxqH2aJ6CBoFL4xHVSn6u8R51m',
+    nickName: 'ssong'
+  },
+  {
+    id: 11,
+    userId: 'bnb145',
+    profile: 'images/users/11.jpg',
+    password: '$2b$10$Vg/ijKMZKg8c/1C9RnTXduLiUvabxqH2aJ6CBoFL4xHVSn6u8R51m',
+    nickName: '민소프트'
   }
 ];
 

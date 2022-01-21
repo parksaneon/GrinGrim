@@ -3,47 +3,143 @@ import { getNickname, getProfile } from './users.js';
 let drawings = [
   {
     id: 1,
-    userId: 1,
+    userId: 4,
     url: 'images/drawings/canvas1.png',
     categoryId: 1,
-    likedUserId: [1, 2, 3, 4]
+    likedUserId: [1]
   },
-
   {
     id: 2,
-    userId: 1,
+    userId: 7,
     url: 'images/drawings/canvas2.png',
     categoryId: 1,
-    likedUserId: [2, 3]
+    likedUserId: [1, 2]
   },
   {
     id: 3,
     userId: 1,
     url: 'images/drawings/canvas3.png',
     categoryId: 1,
-    likedUserId: []
+    likedUserId: [2, 3, 4]
   },
-
   {
     id: 4,
-    userId: 2,
+    userId: 6,
     url: 'images/drawings/canvas4.png',
-    categoryId: 2,
-    likedUserId: [1]
+    categoryId: 1,
+    likedUserId: [3]
   },
   {
     id: 5,
-    userId: 2,
+    userId: 10,
     url: 'images/drawings/canvas5.png',
+    categoryId: 1,
+    likedUserId: [2]
+  },
+  {
+    id: 6,
+    userId: 5,
+    url: 'images/drawings/canvas6.png',
+    categoryId: 2,
+    likedUserId: [2]
+  },
+  {
+    id: 7,
+    userId: 6,
+    url: 'images/drawings/canvas7.png',
+    categoryId: 2,
+    likedUserId: [1, 2]
+  },
+  {
+    id: 8,
+    userId: 10,
+    url: 'images/drawings/canvas8.png',
+    categoryId: 2,
+    likedUserId: [1, 2, 3, 4]
+  },
+  {
+    id: 9,
+    userId: 4,
+    url: 'images/drawings/canvas9.png',
     categoryId: 2,
     likedUserId: []
   },
   {
-    id: 6,
-    userId: 2,
-    url: 'images/drawings/canvas6.png',
+    id: 10,
+    userId: 9,
+    url: 'images/drawings/canvas10.png',
     categoryId: 2,
+    likedUserId: []
+  },
+  {
+    id: 11,
+    userId: 11,
+    url: 'images/drawings/canvas11.png',
+    categoryId: 2,
+    likedUserId: []
+  },
+  {
+    id: 12,
+    userId: 4,
+    url: 'images/drawings/canvas12.png',
+    categoryId: 3,
+    likedUserId: [2]
+  },
+  {
+    id: 13,
+    userId: 9,
+    url: 'images/drawings/canvas13.png',
+    categoryId: 3,
+    likedUserId: [1, 2, 3, 4, 5]
+  },
+  {
+    id: 14,
+    userId: 8,
+    url: 'images/drawings/canvas14.png',
+    categoryId: 3,
     likedUserId: [2, 3]
+  },
+  {
+    id: 15,
+    userId: 7,
+    url: 'images/drawings/canvas15.png',
+    categoryId: 4,
+    likedUserId: [2]
+  },
+  {
+    id: 16,
+    userId: 8,
+    url: 'images/drawings/canvas16.png',
+    categoryId: 4,
+    likedUserId: [1]
+  },
+  {
+    id: 17,
+    userId: 1,
+    url: 'images/drawings/canvas17.png',
+    categoryId: 4,
+    likedUserId: [2, 3, 4, 5, 6, 7]
+  },
+  {
+    id: 18,
+    userId: 10,
+    url: 'images/drawings/canvas18.png',
+    categoryId: 5,
+    likedUserId: [2]
+  },
+  {
+    id: 19,
+    userId: 9,
+    url: 'images/drawings/canvas19.png',
+    categoryId: 5,
+    likedUserId: [4, 5]
+  },
+  {
+    id: 20,
+    userId: 11,
+    url: 'images/drawings/canvas20.png',
+    categoryId: 5,
+    likedUserId: [7]
   }
 ];
 
