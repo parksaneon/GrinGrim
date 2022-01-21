@@ -12,6 +12,10 @@ export default () => ({
       categoryName: getCategoryName(mydrawing.categoryId)
     }));
 
+    const { data: mydrawings } = await axios.get(`/drawings/userid/${USER_ID}`);
+    const categoryNamePromise = mydrawings.map(({ categoryId }) => axios.get(`/category/${categoryId}/name`));
+    const categoryNames = await Promise.all(categoryNamePromise);
+
     return { data: mydrawingsWithCategoryName };
   },
 

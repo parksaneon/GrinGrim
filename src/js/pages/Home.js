@@ -56,7 +56,7 @@ const signUpForm = `
     </div>
     <div class="upload-box">
     <label for="userImage">이곳을 클릭하거나 이미지를 드래그 하세요</label>
-      <input type="file" id="userImage" name="userImage" required value=""/>
+      <input type="file" id="userImage" name="profile" required value="" accept="image/png, image/gif, image/jpeg, image/jpg"/>
       <img src="" alt="" class="showImage"/>
     </div>
     <button type="submit">회원가입</button>
@@ -264,6 +264,21 @@ export default () => ({
     $formWrap.addEventListener('change', ({ target }) => {
       if (!target.matches('#userImage')) return;
       showUploadImage(target);
+    });
+const renderSignIn () => {}
+    $main.addEventListener('click', e => {
+      e.preventDefault();
+
+      if (e.target.classList.contains('btn--logOut')) logOut();
+      else if (e.target.matches('.open--signForm') && !doingNow) toggleModal();
+
+      if (e.target.classList.contains('signIn--open')) {
+        doingNow = 'signIn';
+        renderSignIn();
+      } else if (e.target.classList.contains('signUp--open')) {
+        doingNow = 'signUp';
+        renderSignUp();
+      }
     });
   }
 });
