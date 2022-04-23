@@ -21,10 +21,10 @@ export default () => ({
         ({ id, likedUserId, url, nickname, profile }) => `
 			<figure data-id="${id}">
 				<div class="img-container">
-					<img src="${url}">
+					<img src="${url}" alt="${categoryName}">
 				</div>
 				<figcaption>
-					<img src="${profile}" class="profile"/>
+					<img src="${profile}" alt="${nickname}" class="profile"/>
 					<div class="info-container">
 						<span class="nickname">${nickname}</span>
 						<div class="like--group">
