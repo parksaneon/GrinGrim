@@ -32,7 +32,7 @@ export default () => ({
 							<img src="${drawing.url}" alt="다른 유저 그림" />
 						</div>
 						<figcaption>
-							<img src="${drawing.profile}" class="profile"/>
+							<img src="${drawing.profile}" alt="${drawing.nickname}" class="profile"/>
 							<div class="info-container">
 								<span class="nickname">${drawing.nickname}</span>
 								<div class="like--group">

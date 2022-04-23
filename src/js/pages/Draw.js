@@ -36,14 +36,14 @@ export default () => ({
       const decodeImg = atob(base64.split(',')[1]);
       const arr = decodeImg.split('').map(char => char.charCodeAt(0));
       return new Blob([new Uint8Array(arr)], {
-        type: 'image/png'
+        type: 'image/jpg'
       });
     };
 
     const uploadDrawing = () => {
-      const image = $canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream');
+      const image = $canvas.toDataURL('image/jpg').replace('image/jpg', 'image/octet-stream');
       const file = convertToBlob(image);
-      const fileName = `canvas${new Date().getTime()}.png`;
+      const fileName = `canvas${new Date().getTime()}.jpg`;
       const formData = new FormData();
       formData.append('file', file, fileName);
       formData.append('categoryId', categoryid);
@@ -91,11 +91,6 @@ export default () => ({
       const y = e.offsetY;
       drawLine(x, y);
     };
-    const moveTouchScreen = e => {
-      const x = e.changedTouches[0].pageX - e.target.getBoundingClientRect().left;
-      const y = e.changedTouches[0].pageY - e.target.getBoundingClientRect().top;
-      drawLine(x, y);
-    };
 
     const startDrawing = () => {
       isDrawing = true;
@@ -112,10 +107,5 @@ export default () => ({
     $canvas.addEventListener('mousemove', moveMouse);
     $canvas.addEventListener('mousedown', startDrawing);
     $canvas.addEventListener('mouseup', finishDrawing);
-
-    $canvas.addEventListener('touchmove', moveTouchScreen);
-    $canvas.addEventListener('touchstart', startDrawing);
-    $canvas.addEventListener('touchend', finishDrawing);
-    $canvas.addEventListener('touchcancel', finishDrawing);
   }
 });
