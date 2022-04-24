@@ -147,6 +147,14 @@ export default () => ({
 
     const signUp = async formElement => {
       try {
+        if (!userSignUp.isValidId) {
+          alert('아이디를 확인해 주세요!');
+          return;
+        }
+        if (!userSignUp.isValidPwd) {
+          alert('비밀번호를 확인해 주세요!');
+          return;
+        }
         const formData = new FormData(formElement);
         await sendUserReq(formData);
         toggleModal();
@@ -167,6 +175,7 @@ export default () => ({
 
       if (!checkIdRxp(checkingId)) {
         idInformText.innerText = '영문자, 숫자로 6~20자로 조합해주세요';
+        idInformText.classList.remove('valid');
         return;
       }
 
@@ -184,7 +193,7 @@ export default () => ({
           resultCheckid = !!resultCheckid;
           idInformText.innerText = resultCheckid ? '사용 가능한 아이디 입니다.' : '중복된 아이디 입니다.';
           userSignUp.isValidId = resultCheckid;
-          idInformText.classList.add('valid', resultCheckid);
+          idInformText.classList.toggle('valid', resultCheckid);
         }
       }, 500);
     };
@@ -200,7 +209,7 @@ export default () => ({
         pwdInformText.innerText = resultPassTest
           ? '사용 가능한 패스워드입니다.'
           : '8 ~ 16자 영문, 숫자, 특수문자를 최소 한가지씩 조합해주세요.';
-        pwdInformText.classList.toggle('valid', regExp.test(checkingPwd));
+        pwdInformText.classList.toggle('valid', resultPassTest);
       };
     })();
 
@@ -264,21 +273,6 @@ export default () => ({
     $formWrap.addEventListener('change', ({ target }) => {
       if (!target.matches('#userImage')) return;
       showUploadImage(target);
-    });
-const renderSignIn () => {}
-    $main.addEventListener('click', e => {
-      e.preventDefault();
-
-      if (e.target.classList.contains('btn--logOut')) logOut();
-      else if (e.target.matches('.open--signForm') && !doingNow) toggleModal();
-
-      if (e.target.classList.contains('signIn--open')) {
-        doingNow = 'signIn';
-        renderSignIn();
-      } else if (e.target.classList.contains('signUp--open')) {
-        doingNow = 'signUp';
-        renderSignUp();
-      }
     });
   }
 });
