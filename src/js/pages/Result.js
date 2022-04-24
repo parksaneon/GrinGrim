@@ -13,8 +13,7 @@ export default () => ({
     return { data: { myDrawing, recentDrawingsWithUserInfo } };
   },
 
-  getHtml({ myDrawing, recentDrawingsWithUserInfo }) {
-    const USER_ID = 1;
+  getHtml({ myDrawing, recentDrawingsWithUserInfo, userId }) {
     const myDrawingElement = [myDrawing]
       .map(
         ({ url }) => `
@@ -33,11 +32,11 @@ export default () => ({
 							<img src="${drawing.url}" alt="다른 유저 그림" />
 						</div>
 						<figcaption>
-							<img src="${drawing.profile}" class="profile"/>
+							<img src="${drawing.profile}" alt="${drawing.nickname}" class="profile"/>
 							<div class="info-container">
 								<span class="nickname">${drawing.nickname}</span>
 								<div class="like--group">
-									<i class="${drawing.likedUserId.includes(USER_ID) ? 'fas fa-heart' : 'far fa-heart'} like"></i>
+									<i class="${drawing.likedUserId.includes(userId) ? 'fas fa-heart' : 'far fa-heart'} like"></i>
 									<span>${drawing.likedUserId.length}</span>
 								</div>
 							</div>
@@ -58,13 +57,12 @@ export default () => ({
 			</section>`;
   },
 
-  eventBinding(el) {
-    const USER_ID = 1;
-    const likebuttonGroups = [...el.querySelectorAll('.like--group')];
+  eventBinding(el, userId) {
+    const $drawings = el.querySelector('.drawings');
 
     const renderLikeGroup = (el, likedUserId) => {
       el.innerHTML = `
-        <i class="${likedUserId.includes(USER_ID) ? 'fas fa-heart' : 'far fa-heart'} like"></i>
+        <i class="${likedUserId.includes(userId) ? 'fas fa-heart' : 'far fa-heart'} like"></i>
         <span>${likedUserId.length}</span>
       `;
     };
@@ -74,14 +72,12 @@ export default () => ({
       const { id } = e.target.closest('figure').dataset;
       const $likeGroup = e.target.closest('.like--group');
       const { data: likedUserId } = await axios.patch(`/drawings/${id}`, {
-        userId: USER_ID
+        userId
       });
 
       renderLikeGroup($likeGroup, likedUserId);
     };
 
-    likebuttonGroups.forEach(likebutton => {
-      likebutton.onclick = toggleLiked;
-    });
+    $drawings.addEventListener('click', toggleLiked);
   }
 });

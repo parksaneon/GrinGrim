@@ -16,9 +16,9 @@ export const auth = (req, res) => {
 
   jwt.verify(accessToken, process.env.JWT_SECRET_KEY, (error, decoded) => {
     if (error) {
-      res.status(401).json({ userId: null });
+      res.json(null);
     } else {
-      res.status(201).json({ userId: decoded.id });
+      res.status(201).json(decoded.id);
     }
   });
 };
@@ -38,12 +38,12 @@ export const checkId = (req, res) => {
 export const signUp = (req, res) => {
   try {
     const { userId, password, nickName } = req.body;
-    const { path: userImage } = req.file;
+    const { path: profile } = req.file;
     const id = generateUserId();
     const hashedPassword = bcrypt.hashSync(password, 10);
-    addNewUser({ id, userId, password: hashedPassword, nickName, userImage });
+    addNewUser({ id, userId, password: hashedPassword, nickName, profile });
 
-    const accessToken = createToken(userId);
+    const accessToken = createToken(id);
     setTokenInCookie(res, accessToken);
 
     res.status(201).json({ message: '회원가입 성공' });
