@@ -25,7 +25,7 @@ export default () => ({
             ({ categoryName, likedUserId, url }) => `
             <figure>
                 <div class="img-container">
-                  <img src="${url}">
+                  <img src="${url}" alt="${categoryName}">
                 </div>
                 <figcaption>
                   <p>주제: ${categoryName}</p>
